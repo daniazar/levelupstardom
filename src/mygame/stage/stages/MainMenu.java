@@ -29,21 +29,24 @@ public class MainMenu extends GameStage {
 
 	    public void onUIAction(UIAction e) {
 		if(e.getSource() == newGameButton) {
-		    //startGame();
+		    startGame();
                     System.out.println("Start game");
 		} else if(e.getSource() == settingsButton) {
-		    //jumpTo(Settings.class.getName());
+		    jumpTo(Settings.class.getName());
                     System.out.println("Settings");
                 } else if(e.getSource() == highscoreButton) {
+                    jumpTo(HighscoreMenu.class.getName());
                     System.out.println("Highscores");
 		} else if(e.getSource() == exitButton) {
                     System.out.println("Exit");
-		    //Logger.getLogger(getClass().getName()).log(Level.INFO, "implement this");
+                    System.exit(0);
 		}
 	    }
 	};
+        
 	newGameButton.addUIActionListener(listener);
 	settingsButton.addUIActionListener(listener);
+        highscoreButton.addUIActionListener(listener);
 	exitButton.addUIActionListener(listener);
 
 	UIPanel panel = new UIPanel();
@@ -65,7 +68,7 @@ public class MainMenu extends GameStage {
 //	TrackInfo firstTrack = seq.next(null);
 //	getGameStageEnvironment().setGlobalProperty(PropertyKey.NEXT_TRACK_INFO,
 //		firstTrack);
-//	jumpTo(GameStart.class.getName());
+	jumpTo(LevelStage.class.getName());
     }
 
     @Override
