@@ -10,7 +10,13 @@ import jme3ui.core.UISystem;
 import jme3ui.theme.UIThemeManager;
 import jme3ui.theme.orange.OrangeUITheme;
 import mygame.stage.GameStageEnvironment;
+import mygame.stage.stages.TimeHighscores;
+import mygame.stage.stages.HighscoreMenu;
+import mygame.stage.stages.LevelStage;
 import mygame.stage.stages.MainMenu;
+import mygame.stage.stages.ObjectHighscores;
+import mygame.stage.stages.Settings;
+import mygame.util.HighScores.ScoreType;
 
 /**
  * test
@@ -53,16 +59,21 @@ public class Main extends SimpleBulletApplication implements GameStageEnvironmen
 
         //rootNode.addControl(triggerSystem);
 
-//        TrackStage trackStage = new TrackStage(this);
-//	GameOver gameOver = new GameOver(this);
-//        WinStage trackWin = new WinStage(this);
-//	trackStage.addChild(gameOver);
-//	trackStage.addChild(trackWin);
+        LevelStage levelStage = new LevelStage(this);
+	//GameOver gameOver = new GameOver(this);
+        //WinStage trackWin = new WinStage(this);
+	//levelStage.addChild(gameOver);
+	//levelStage.addChild(trackWin);
+
+        HighscoreMenu highScoreMenu = new HighscoreMenu(this);
+        highScoreMenu.addChild(new TimeHighscores(this));
+        highScoreMenu.addChild(new ObjectHighscores(this));
 
         MainMenu mainMenu = new MainMenu(this);
-	//mainMenu.addChild(new Settings(this));
+	mainMenu.addChild(new Settings(this));
+        mainMenu.addChild(highScoreMenu);
 //	mainMenu.addChild(new GameStart(this));
-//	mainMenu.addChild(trackStage);
+	mainMenu.addChild(levelStage);
 //	mainMenu.addChild(new PlayerHud(this));
 	mainMenu.jumpTo(MainMenu.class.getName());
     }
