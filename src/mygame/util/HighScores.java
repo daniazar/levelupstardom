@@ -14,6 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import mygame.model.Score;
 
@@ -119,8 +121,10 @@ public class HighScores {
     public void addHighScore(Score score, ScoreType scoreType) {
         if (scoreType == ScoreType.SCORE_TIME) {
             timeScores.add(score);
+            Collections.sort(timeScores, new byScoreDescending());
         } else {
             objectScores.add(score);
+            Collections.sort(objectScores, new byScoreDescending());
         }
     }
 
@@ -129,5 +133,13 @@ public class HighScores {
             return timeScores;
         }
         return objectScores;
+    }
+
+    class byScoreDescending implements Comparator<Score> {
+
+        public int compare(Score t, Score t1) {
+            return (int)((t.score - t1.score) * 100);
+        }
+
     }
 }
