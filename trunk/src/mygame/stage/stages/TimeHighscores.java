@@ -55,8 +55,16 @@ public class TimeHighscores extends GameStage {
 
         HighScores highScores = HighScores.getInstance();
 
+        int i = 0;
+
         for (Score score : highScores.getHighScore(ScoreType.SCORE_TIME)) {
-            panel.add(new UILabel(score.name + " " + score.score));
+            if (i < 10) {
+                panel.add(new UILabel(score.name + " " + score.score));
+            } else {
+                break;
+            }
+
+            i++;
         }
 
         panel.add(backButton);
