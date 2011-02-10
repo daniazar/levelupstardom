@@ -29,7 +29,7 @@ public class MainMenu extends GameStage {
 
 	    public void onUIAction(UIAction e) {
 		if(e.getSource() == newGameButton) {
-		    startGame();
+		    jumpTo(LevelSelect.class.getName());
                     System.out.println("Start game");
 		} else if(e.getSource() == settingsButton) {
 		    jumpTo(Settings.class.getName());
