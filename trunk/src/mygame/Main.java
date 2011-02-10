@@ -12,6 +12,7 @@ import jme3ui.theme.orange.OrangeUITheme;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.TimeHighscores;
 import mygame.stage.stages.HighscoreMenu;
+import mygame.stage.stages.LevelSelect;
 import mygame.stage.stages.LevelStage;
 import mygame.stage.stages.MainMenu;
 import mygame.stage.stages.ObjectHighscores;
@@ -69,8 +70,10 @@ public class Main extends SimpleBulletApplication implements GameStageEnvironmen
         highScoreMenu.addChild(new TimeHighscores(this));
         highScoreMenu.addChild(new ObjectHighscores(this));
 
+
         MainMenu mainMenu = new MainMenu(this);
 	mainMenu.addChild(new Settings(this));
+        mainMenu.addChild(new LevelSelect(this));
         mainMenu.addChild(highScoreMenu);
 //	mainMenu.addChild(new GameStart(this));
 	mainMenu.addChild(levelStage);
