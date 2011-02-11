@@ -34,6 +34,9 @@ package mygame.stage.gui;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.font.BitmapFont;
+import com.jme3.input.FlyByCamera;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import java.awt.Dimension;
 import mygame.stage.GameStageEnvironment;
@@ -76,4 +79,15 @@ public class TestTimer extends SimpleApplication implements GameStageEnvironment
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public FlyByCamera getFlyCamera() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public BitmapFont getGuiFont(){
+        return guiFont;
+    }
+
+     public ViewPort getViewPort(){
+         return viewPort;
+     }
 }

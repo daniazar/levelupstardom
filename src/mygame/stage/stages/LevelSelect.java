@@ -33,6 +33,8 @@ public class LevelSelect extends GameStage {
 
         public void onUIAction(UIAction action) {
             System.out.println("Selected level " + levelFilename);
+            if(levelFilename.equals("nivel1.lvl"))
+                jumpTo("LevelExample");
         }
 
     }

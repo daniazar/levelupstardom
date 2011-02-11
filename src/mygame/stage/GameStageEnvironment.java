@@ -7,8 +7,11 @@ package mygame.stage;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.font.BitmapFont;
+import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import java.awt.Dimension;
 //import jme3clogic.TriggerSystem;
@@ -25,6 +28,8 @@ public interface GameStageEnvironment {
 
     Camera getCamera();
 
+    FlyByCamera getFlyCamera();
+
     //TriggerSystem getTriggerSystem();
 
     AssetManager getAssetManager();
@@ -38,4 +43,9 @@ public interface GameStageEnvironment {
     AudioRenderer getAudioRenderer();
 
     void setDefaultInputState(boolean enabled);
+
+    BitmapFont getGuiFont();
+
+    public ViewPort getViewPort();
+
 }
