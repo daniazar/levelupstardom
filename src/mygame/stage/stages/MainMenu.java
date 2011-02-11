@@ -5,6 +5,8 @@
 
 package mygame.stage.stages;
 
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import java.awt.Dimension;
 import jme3ui.event.action.UIAction;
 import jme3ui.event.action.UIActionListener;
@@ -14,7 +16,10 @@ import jme3ui.widgets.UIFrame;
 import jme3ui.widgets.UIPanel;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
-
+import mygame.stage.gui.LevelController;
+import mygame.stage.gui.Timer;
+import mygame.stage.scene.SceneObject;
+import mygame.stage.scene.SceneObjectImpl;
 public class MainMenu extends GameStage {
     private final UIFrame FRAME;
 
@@ -56,6 +61,8 @@ public class MainMenu extends GameStage {
         panel.add(highscoreButton);
 	panel.add(exitButton);
 
+        //env.getGuiNode().attachChild(new LevelController(env, new SceneObjectImpl(new Geometry()), new SceneObjectImpl(new Geometry()), 10));
+	
 	UIFrame frame = new UIFrame();
 	frame.setContents(panel);
 	FRAME = frame;
