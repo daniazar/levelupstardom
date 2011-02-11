@@ -22,13 +22,14 @@ public class LevelController extends Node{
     public Timer timer;
     private BitmapText objects, distance;
     private int objectCounter = 0 ,totalObjects;
+    private GameStageEnvironment env;
 
     public LevelController(GameStageEnvironment env, SceneObject player, SceneObject levelEnd, int totalObjects){
 
         this.levelEnd = levelEnd;
         this.player = player;
         this.totalObjects = totalObjects;
-
+        this.env = env;
 
         objects  = new BitmapText(env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
         distance = new BitmapText(env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
@@ -39,7 +40,7 @@ public class LevelController extends Node{
         attachChild(objects);
         attachChild(timer);
         attachChild(distance);
-
+        initCrossHairs();
     }
 
     public void objectCollected(){
@@ -56,6 +57,17 @@ public class LevelController extends Node{
         distance.setText("Distance to lvl end " + player.getWrappedSpatial().getLocalTranslation().distance(levelEnd.getWrappedSpatial().getLocalTranslation()) + "meters.");
     }
 
+ /** A plus sign used as crosshairs to help the player with aiming.*/
+  protected void initCrossHairs() {
+   BitmapText ch = new BitmapText(env.getGuiFont(), false);
+    ch.setSize(env.getGuiFont().getCharSet().getRenderedSize() * 2);
+    ch.setText("+"); // crosshairs
+    ch.setLocalTranslation( // center
+      env.getScreenSize().width / 2 - env.getGuiFont().getCharSet().getRenderedSize() / 3 * 2,
+      env.getScreenSize().height / 2 + ch.getLineHeight() / 2, 0);
+    attachChild(ch);
+
+  }
 
 
 

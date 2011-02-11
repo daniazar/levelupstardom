@@ -1,8 +1,16 @@
 package mygame;
 
 
+import com.jme3.app.SimpleApplication;
 import com.jme3.app.SimpleBulletApplication;
+import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.font.BitmapFont;
+import com.jme3.input.FlyByCamera;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.system.AppSettings;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +20,7 @@ import jme3ui.theme.orange.OrangeUITheme;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.TimeHighscores;
 import mygame.stage.stages.HighscoreMenu;
+import mygame.stage.stages.LevelExample;
 import mygame.stage.stages.LevelSelect;
 import mygame.stage.stages.LevelStage;
 import mygame.stage.stages.MainMenu;
@@ -23,21 +32,30 @@ import mygame.util.HighScores.ScoreType;
  * test
  * @author normenhansen
  */
-public class Main extends SimpleBulletApplication implements GameStageEnvironment {
+public class Main extends /*SimpleBulletApplication */ SimpleApplication implements GameStageEnvironment {
 
+    private BulletAppState bulletAppState;
     private final Map<Object, Object> properties = new HashMap<Object, Object>();
    // private final TriggerSystem triggerSystem = new TriggerSystem();
    // private MouseCamera mcam;
 
     public static void main(String[] args) {
+
         Main main = new Main();
-	main.start();
+	AppSettings settings = new AppSettings(true);
+        settings.setRenderer(AppSettings.LWJGL_OPENGL3);
+        settings.setSettingsDialogImage("/Textures/Logo.png");
+        main.setSettings(settings);
+        main.start();
     }
 
     @Override
     public void simpleInitApp() {
         UIThemeManager.setDefaultTheme(new OrangeUITheme());
-
+        bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
+        bulletAppState.getPhysicsSpace().setAccuracy(0.005f);
+        
         //mcam = new MouseCamera(cam, inputManager);
 
         flyCam.setEnabled(false);
@@ -78,6 +96,7 @@ public class Main extends SimpleBulletApplication implements GameStageEnvironmen
 //	mainMenu.addChild(new GameStart(this));
 	mainMenu.addChild(levelStage);
 //	mainMenu.addChild(new PlayerHud(this));
+        mainMenu.addChild(new LevelExample(this));
 	mainMenu.jumpTo(MainMenu.class.getName());
     }
 
@@ -106,5 +125,22 @@ public class Main extends SimpleBulletApplication implements GameStageEnvironmen
 
     public void setGlobalProperty(Object key, Object value) {
 	properties.put(key, value);
+    }
+
+    public PhysicsSpace getPhysicsSpace() {
+       return bulletAppState.getPhysicsSpace();
+    }
+
+
+    public FlyByCamera getFlyCamera(){
+        return flyCam;
+    }
+
+    public BitmapFont getGuiFont(){
+        return guiFont;
+    }
+
+    public ViewPort getViewPort(){
+            return viewPort;
     }
 }
