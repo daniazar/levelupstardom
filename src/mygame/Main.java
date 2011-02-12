@@ -27,6 +27,7 @@ import mygame.stage.stages.MainMenu;
 import mygame.stage.stages.ObjectHighscores;
 import mygame.stage.stages.Settings;
 import mygame.util.HighScores.ScoreType;
+import mygame.stage.GameStage;
 
 /**
  * test
@@ -39,6 +40,8 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
    // private final TriggerSystem triggerSystem = new TriggerSystem();
    // private MouseCamera mcam;
 
+    public static GameStage CURRENT;
+
     public static void main(String[] args) {
 
         Main main = new Main();
@@ -49,10 +52,14 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         main.start();
     }
 
+
+
     @Override
     public void simpleInitApp() {
         UIThemeManager.setDefaultTheme(new OrangeUITheme());
         bulletAppState = new BulletAppState();
+        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
+
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().setAccuracy(0.005f);
         
@@ -102,7 +109,8 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+        if(CURRENT != null)
+        CURRENT.update(tpf);
     }
 
     @Override
@@ -141,6 +149,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
     }
 
     public ViewPort getViewPort(){
-            return viewPort;
+        return viewPort;
     }
+
 }
