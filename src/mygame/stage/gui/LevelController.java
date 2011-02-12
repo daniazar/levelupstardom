@@ -9,6 +9,8 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import mygame.level.SceneLoader;
+import mygame.model.Level;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.scene.SceneObject;
 
@@ -23,6 +25,7 @@ public class LevelController extends Node{
     private BitmapText objects, distance;
     private int objectCounter = 0 ,totalObjects;
     private GameStageEnvironment env;
+
 
     public LevelController(GameStageEnvironment env, SceneObject player, SceneObject levelEnd, int totalObjects){
 
@@ -68,6 +71,8 @@ public class LevelController extends Node{
     attachChild(ch);
 
   }
+
+
 
 
 
