@@ -20,21 +20,28 @@ import mygame.stage.GameStageEnvironment;
 
 public class LevelSelect extends GameStage {
     private final UIFrame FRAME;
-
+    private GameStageEnvironment env;
     private List<Level> levels;
 
     class LevelButtonListener implements UIActionListener {
 
         String levelFilename;
+        int index;
 
-        public LevelButtonListener(String levelFilename) {
+        public LevelButtonListener(String levelFilename, int indx) {
             this.levelFilename = levelFilename;
+            index = indx;
         }
 
         public void onUIAction(UIAction action) {
             System.out.println("Selected level " + levelFilename);
-            if(levelFilename.equals("nivel1.lvl"))
+            LevelStage levelStage = (LevelStage) env.getLevelStage();
+            if(levelFilename.equals("nivel2.lvl"))
                 jumpTo("LevelExample");
+            levelStage.loadLevel(levels.get(index));
+ 
+            jumpTo("LevelStage");
+
         }
 
     }
@@ -49,13 +56,15 @@ public class LevelSelect extends GameStage {
 	UIPanel panel = new UIPanel();
 	panel.setLayout(new UIGridLayout(levels.size(), 1));
 
+        int index = 0;
         for (Level level : levels) {
             UIButton levelButton = new UIButton(level.getName());
-            levelButton.addUIActionListener(new LevelButtonListener(level.getFilename()));
+            levelButton.addUIActionListener(new LevelButtonListener(level.getFilename(), index));
             panel.add(levelButton);
+            index++;
         }
 
-
+        this.env = env;
 	UIFrame frame = new UIFrame();
 	frame.setContents(panel);
 	FRAME = frame;

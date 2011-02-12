@@ -48,4 +48,6 @@ public interface GameStageEnvironment {
 
     public ViewPort getViewPort();
 
+    GameStage getLevelStage();
+
 }

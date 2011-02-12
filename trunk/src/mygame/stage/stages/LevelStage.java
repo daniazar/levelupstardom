@@ -5,6 +5,12 @@
 
 package mygame.stage.stages;
 
+
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import mygame.level.ModelLoader;
+import mygame.level.SceneLoader;
+import mygame.model.Level;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 
@@ -14,13 +20,42 @@ import mygame.stage.GameStageEnvironment;
  */
 public class LevelStage extends GameStage {
 
+    private GameStageEnvironment env;
+    private Node level;
+    private SceneLoader sceneLoader;
+    private ModelLoader modelLoader;
+
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
+        this.env = env;
     }
 
+    //Call this to load a level before jump to
+    public void loadLevel(Level level)
+  {
+      sceneLoader = new SceneLoader();
+      String fname = level.getFilename();
+      //Retrieve the .obj filename from level filename
+      String objFile = "/Scenes/level1/level1.j3o";
+      this.level = new Node();
+      
+      env.getRootNode().attachChild(this.level);
+      sceneLoader.init(objFile,this.level, env);
+       modelLoader = new ModelLoader();
+      modelLoader.init(sceneLoader);
+  }
     @Override
     public void start() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        initializeCamera();
+        
+    }
+
+
+    private void initializeCamera(){
+        env.getCamera().setLocation(sceneLoader.getSpawnPoint());
+        env.getCamera().lookAt(sceneLoader.getGoalPos(), new Vector3f(0, 1, 0));
+        //env.getCamera().setFrustumFar(15);
+
     }
 
     @Override

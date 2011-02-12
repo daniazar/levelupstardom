@@ -26,4 +26,21 @@ public class Level {
         this.name = name;
         this.filename = filename;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+
+    public boolean equals(Object o)
+    {
+        if (o.getClass() != Level.class)
+            return false;
+        if (((Level)o).name.equals(name))
+            return true;
+        else
+            return false;
+    }
 }

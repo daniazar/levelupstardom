@@ -2,11 +2,11 @@ package mygame;
 
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.SimpleBulletApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.font.BitmapFont;
 import com.jme3.input.FlyByCamera;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -17,6 +17,7 @@ import java.util.Map;
 import jme3ui.core.UISystem;
 import jme3ui.theme.UIThemeManager;
 import jme3ui.theme.orange.OrangeUITheme;
+import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.TimeHighscores;
 import mygame.stage.stages.HighscoreMenu;
@@ -35,10 +36,17 @@ import mygame.stage.GameStage;
  */
 public class Main extends /*SimpleBulletApplication */ SimpleApplication implements GameStageEnvironment {
 
+//    private static class Stage {
+//
+//        public Stage() {
+//        }
+//    }
+
     private BulletAppState bulletAppState;
     private final Map<Object, Object> properties = new HashMap<Object, Object>();
    // private final TriggerSystem triggerSystem = new TriggerSystem();
    // private MouseCamera mcam;
+    private GameStage levelStage;
 
     public static GameStage CURRENT;
 
@@ -46,7 +54,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
         Main main = new Main();
 	AppSettings settings = new AppSettings(true);
-        settings.setRenderer(AppSettings.LWJGL_OPENGL3);
+        settings.setRenderer(AppSettings.LWJGL_OPENGL2);
         settings.setSettingsDialogImage("/Textures/Logo.png");
         main.setSettings(settings);
         main.start();
@@ -65,7 +73,11 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         
         //mcam = new MouseCamera(cam, inputManager);
 
-        flyCam.setEnabled(false);
+        
+        //flyCam.setUpVector(Vector3f.UNIT_Y);
+//        flyCam.setDragToRotate(true);
+//        flyCam.setMoveSpeed(20);
+//        flyCam.setEnabled(true);
 	statsView.removeFromParent();
 
         UISystem.initialize(this);
@@ -85,7 +97,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
         //rootNode.addControl(triggerSystem);
 
-        LevelStage levelStage = new LevelStage(this);
+        levelStage = new LevelStage(this);
 	//GameOver gameOver = new GameOver(this);
         //WinStage trackWin = new WinStage(this);
 	//levelStage.addChild(gameOver);
@@ -150,6 +162,11 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
     public ViewPort getViewPort(){
         return viewPort;
+    }
+
+
+    public GameStage getLevelStage() {
+        return levelStage;
     }
 
 }

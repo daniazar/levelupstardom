@@ -39,6 +39,7 @@ import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import java.awt.Dimension;
+import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.scene.SceneObjectImpl;
 
@@ -90,4 +91,8 @@ public class TestTimer extends SimpleApplication implements GameStageEnvironment
      public ViewPort getViewPort(){
          return viewPort;
      }
+
+    public GameStage getLevelStage() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
