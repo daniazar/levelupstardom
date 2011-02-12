@@ -7,6 +7,7 @@ package mygame.stage;
 
 import java.util.LinkedList;
 import java.util.List;
+import mygame.Main;
 
 /**
  *
@@ -33,6 +34,12 @@ public abstract class GameStage {
     public abstract void pause();
 
     public abstract void stop();
+
+    public void update(float tpf){
+
+    }
+
+
 
     public void addChild(GameStage stage) {
 	stage.parent = this;
@@ -70,6 +77,7 @@ public abstract class GameStage {
 	    GameStage stage = findStage(stageName);
 	    if (stage != null) {
 		this.stop();
+                Main.CURRENT = stage;
 		stage.start();
 	    }
 	}
