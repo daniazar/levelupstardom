@@ -224,14 +224,14 @@ public class Player implements ActionListener, PhysicsCollisionListener, AnimEve
 
     public void collision(PhysicsCollisionEvent event) {
         if ("bullet".equals(event.getNodeA().getName())) {
-            final Node node = event.getNodeA();
+            final Node node = (Node) event.getNodeA();
             env.getPhysicsSpace().remove(node);
             node.removeFromParent();
             effect.killAllParticles();
             effect.setLocalTranslation(node.getLocalTranslation());
             effect.emitAllParticles();
         } else if ("bullet".equals(event.getNodeB().getName())) {
-            final Node node = event.getNodeB();
+            final Node node = (Node) event.getNodeB();
             env.getPhysicsSpace().remove(node);
             node.removeFromParent();
             effect.killAllParticles();

@@ -8,7 +8,6 @@ package mygame.stage.stages;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import mygame.level.ModelLoader;
 import mygame.level.SceneLoader;
 import mygame.model.Level;
 import mygame.stage.GameStage;
@@ -23,7 +22,7 @@ public class LevelStage extends GameStage {
     private GameStageEnvironment env;
     private Node level;
     private SceneLoader sceneLoader;
-    private ModelLoader modelLoader;
+
 
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
@@ -41,8 +40,7 @@ public class LevelStage extends GameStage {
       
       env.getRootNode().attachChild(this.level);
       sceneLoader.init(objFile,this.level, env);
-       modelLoader = new ModelLoader();
-      modelLoader.init(sceneLoader);
+ 
   }
     @Override
     public void start() {
