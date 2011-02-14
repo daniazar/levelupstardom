@@ -9,6 +9,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import mygame.util.Preferences;
 
 /**
  *
@@ -34,7 +35,7 @@ public class SoundManager {
                 gameBGMClip.open(audioIn);
             }
 
-            if(!gameBGMClip.isRunning()) {
+            if(!gameBGMClip.isRunning() && Preferences.getInstance().isMusicEnabled()) {
                 gameBGMClip.loop(Clip.LOOP_CONTINUOUSLY);
             }
 
@@ -53,7 +54,7 @@ public class SoundManager {
                 menuBGMClip.open(audioIn);
             }
 
-            if(!menuBGMClip.isRunning()) {
+            if(!menuBGMClip.isRunning() && Preferences.getInstance().isMusicEnabled()) {
                 menuBGMClip.loop(Clip.LOOP_CONTINUOUSLY);
             }
 
@@ -72,7 +73,7 @@ public class SoundManager {
                 stepsClip.open(audioIn);
             }
 
-            if(!stepsClip.isRunning()) {
+            if(!stepsClip.isRunning() && Preferences.getInstance().isSoundFXEnabled()) {
                 stepsClip.loop(Clip.LOOP_CONTINUOUSLY);
             }
             
@@ -95,7 +96,7 @@ public class SoundManager {
                 objectPickUpClip.open(audioIn);
             }
 
-            if(!objectPickUpClip.isRunning()) {
+            if(!objectPickUpClip.isRunning() && Preferences.getInstance().isSoundFXEnabled()) {
                 objectPickUpClip.start();
             }
 
@@ -114,7 +115,7 @@ public class SoundManager {
                 fallClip.open(audioIn);
             }
 
-            if(!fallClip.isRunning()) {
+            if(!fallClip.isRunning() && Preferences.getInstance().isSoundFXEnabled()) {
                 fallClip.start();
             }
 
@@ -133,7 +134,7 @@ public class SoundManager {
                 damageClip.open(audioIn);
             }
 
-            if(!damageClip.isRunning()) {
+            if(!damageClip.isRunning() && Preferences.getInstance().isSoundFXEnabled()) {
                 damageClip.start();
             }
 
@@ -152,7 +153,7 @@ public class SoundManager {
                 damageClip.open(audioIn);
             }
 
-            if(!damageClip.isRunning()) {
+            if(!damageClip.isRunning() && Preferences.getInstance().isMusicEnabled()) {
                 damageClip.start();
             }
 
@@ -175,7 +176,7 @@ public class SoundManager {
                 gameOverClip.open(audioIn);
             }
 
-            if(!gameOverClip.isRunning()) {
+            if(!gameOverClip.isRunning() && Preferences.getInstance().isMusicEnabled()) {
                 gameOverClip.start();
             }
 
