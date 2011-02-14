@@ -6,9 +6,6 @@
 package mygame.stage.stages;
 
 import com.jme3.bounding.BoundingBox;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -31,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import mygame.ChaseCam;
 import mygame.Player;
+import mygame.media.SoundManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.gui.LevelController;
@@ -104,6 +102,8 @@ public class LevelExample extends GameStage {
 
 
         camera = new ChaseCam(env, player);
+
+
     }
 
     private void initializeCamera(){
@@ -205,6 +205,7 @@ public class LevelExample extends GameStage {
         camLeft.y = 0;
         player.walkDirection.set(0, 0, 0);
         player.modelDirection.set(0, 0, 2);
+        
         if (player.left) {
             player.walkDirection.addLocal(camLeft);
         }

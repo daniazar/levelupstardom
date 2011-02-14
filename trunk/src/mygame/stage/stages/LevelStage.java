@@ -9,6 +9,7 @@ package mygame.stage.stages;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mygame.level.SceneLoader;
+import mygame.media.SoundManager;
 import mygame.model.Level;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
@@ -45,7 +46,8 @@ public class LevelStage extends GameStage {
     @Override
     public void start() {
         initializeCamera();
-        
+                SoundManager.stopMenuBGM();
+        SoundManager.playGameBGM();
     }
 
 
