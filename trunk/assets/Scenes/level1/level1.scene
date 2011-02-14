@@ -1,25 +1,25 @@
 <scene formatVersion="1.0.0">
   <nodes>
     <node name="level">
-      <position x="0.000000" y="0.000000" z="-0.000000"/>
-      <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
-      <scale x="1.000000" y="1.000000" z="1.000000"/>
+      <position x="-1.778131" y="1.513834" z="-0.956360"/>
+      <quaternion x="0.707107" y="0.000000" z="-0.000000" w="0.707107"/>
+      <scale x="3.522871" y="3.522871" z="3.522871"/>
       <entity name="level" meshFile="Level.mesh"/>
       <node name="Spawn">
         <position x="-11.886299" y="11.059424" z="-0.712413"/>
-        <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+        <quaternion x="-0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
         <scale x="1.000000" y="1.000000" z="1.000000"/>
         <entity name="Spawn" meshFile="Spawn.mesh"/>
       </node>
       <node name="Goal">
         <position x="0.000000" y="-9.259274" z="-1.134979"/>
-        <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+        <quaternion x="-0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
         <scale x="1.000000" y="1.000000" z="1.000000"/>
         <entity name="Goal" meshFile="Goal.mesh"/>
       </node>
       <node name="NPC">
-        <position x="12.758436" y="11.310541" z="-1.389430"/>
-        <quaternion x="0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
+        <position x="12.758435" y="11.310541" z="-1.389430"/>
+        <quaternion x="-0.000000" y="0.000000" z="-0.000000" w="1.000000"/>
         <scale x="1.000000" y="1.000000" z="1.000000"/>
         <entity name="NPC" meshFile="NPC.mesh"/>
       </node>

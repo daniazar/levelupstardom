@@ -66,4 +66,15 @@ public class LevelStage extends GameStage {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void update(float tpf) {
+        env.getRootNode().updateLogicalState(tpf);
+        env.getRootNode().updateGeometricState();
+
+
+        sceneLoader.update(tpf);
+    }
+
+
+
 }
