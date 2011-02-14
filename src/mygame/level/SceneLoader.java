@@ -47,13 +47,13 @@ public class SceneLoader {
         scene = (Node) env.getAssetManager().loadModel(levelObj);
   
         spawn = scene.getChild("Spawn");
-//        floor = (Node) scene.getChild("level");
-//        Material mat_default = new Material(
-//                env.getAssetManager(), "Common/MatDefs/Misc/ShowNormals.j3md");
-        //floor.setMaterial(mat_default);
+        floor = (Node) scene.getChild("level");
+       Material mat_default = new Material(
+                env.getAssetManager(), "Common/MatDefs/Misc/ShowNormals.j3md");
+        floor.setMaterial(mat_default);
         goal = (Node) scene.getChild("Goal");
-        spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
-        env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
+     //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
+   //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
 
         reorient();
         //Physics
@@ -62,7 +62,7 @@ public class SceneLoader {
         CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) scene);
 
         PhysicsNode levelNode = new PhysicsNode(scene, levelShape, 0);
-        levelNode.attachDebugShape(env.getAssetManager());
+  //      levelNode.attachDebugShape(env.getAssetManager());
 //
         level.attachChild(levelNode);
 
@@ -88,7 +88,7 @@ public class SceneLoader {
         // Add a physics sphere to the world
         PhysicsNode physicsSphere = new PhysicsNode(new SphereCollisionShape(1), 1);
 
-        physicsSphere.setLocalTranslation(new Vector3f(0, 0, -10));
+        physicsSphere.setLocalTranslation(new Vector3f(0, 20, 0));
         physicsSphere.attachDebugShape(env.getAssetManager());
         physicsSphere.addCollideWithGroup(PhysicsNode.COLLISION_GROUP_02);
         level.attachChild(physicsSphere);
@@ -133,17 +133,15 @@ public class SceneLoader {
 
     private void reorient() {
 
-        levelNode.rotate((float) Math.toRadians(90.0f), (float) Math.toRadians(
-                0.0f), (float) Math.toRadians(0.0f));
+     //   levelNode.rotate((float) Math.toRadians(180.0f), (float) Math.toRadians(
+        //        90.0f), (float) Math.toRadians(0.0f));
         //levelNode.setLocalTranslation(new Vector3f(0.0f, -2.5f, 0.0f));
 
     }
 
-    private void setCollisionDetection() {
-        CollisionShape shape = CollisionShapeFactory.createMeshShape(scene);
-        //landscape = new RigidBodyControl(shape, 0);
-        //  scene.addControl(landscape);
-        //  env.getPhysicsSpace().add(landscape);
 
+    public void update(float tpf)
+    {
+        player.update(tpf);
     }
 }
