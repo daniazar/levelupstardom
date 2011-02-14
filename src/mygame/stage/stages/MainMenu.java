@@ -14,6 +14,7 @@ import jme3ui.layouts.UIGridLayout;
 import jme3ui.widgets.UIButton;
 import jme3ui.widgets.UIFrame;
 import jme3ui.widgets.UIPanel;
+import mygame.media.SoundManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.gui.LevelController;
@@ -84,6 +85,7 @@ public class MainMenu extends GameStage {
 	FRAME.resizeAndCenter(new Dimension(240, 200),
 		getGameStageEnvironment().getScreenSize());
 	FRAME.setVisible(true);
+        SoundManager.playMenuBGM();
     }
 
     @Override
