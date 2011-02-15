@@ -52,8 +52,8 @@ public class LevelStage extends GameStage {
 
 
     private void initializeCamera(){
-        env.getCamera().setLocation(sceneLoader.getSpawnPoint());
-        env.getCamera().lookAt(sceneLoader.getGoalPos(), new Vector3f(0, 1, 0));
+        //env.getCamera().setLocation(sceneLoader.getSpawnPoint());
+       // env.getCamera().lookAt(sceneLoader.getGoalPos(), new Vector3f(0, 1, 0));
         //env.getCamera().setFrustumFar(15);
 
     }
