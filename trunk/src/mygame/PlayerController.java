@@ -14,7 +14,11 @@ import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.nodes.PhysicsCharacterNode;
+import com.jme3.collision.Collidable;
+import com.jme3.collision.CollisionResults;
+import com.jme3.collision.UnsupportedCollisionException;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
@@ -30,6 +34,7 @@ import com.jme3.scene.Node;
 import java.nio.channels.Channel;
 import mygame.level.SceneLoader;
 import mygame.stage.GameStageEnvironment;
+import mygame.stage.stages.LevelFoundation;
 
 /**
  *
@@ -37,23 +42,25 @@ import mygame.stage.GameStageEnvironment;
  */
 public class PlayerController implements AnimEventListener, ActionListener, PhysicsCollisionListener{
 
-    private Node placeholder, player;
+    public Node  player, COGplaceholder, baseplaceholder;
+
     private GameStageEnvironment env;
     private SceneLoader scLoader;
     private BitmapText sysout;
     static final Quaternion ROTATE_LEFT = new Quaternion();
         //animation
-    AnimChannel animationChannel;
-    AnimChannel shootingChannel;
-    AnimControl animationControl;
+        private AnimChannel channel;
+    private AnimControl control;
 
-    private PhysicsCharacterNode character;
+    private PhysicsCharacterNode playerPhysics;
     private boolean play = false;//play or stop the animation
 
     Vector3f walkDirection = new Vector3f();
     Quaternion modelRotation = new Quaternion();
     Vector3f modelDirection = new Vector3f();
     Vector3f modelRight = new Vector3f();
+
+
 
         float airTime = 0;
     //camera
@@ -63,6 +70,9 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
     static {
         ROTATE_LEFT.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
     }
+
+        float[] myangles = {(float) Math.toRadians(90.0f), (float) Math.toRadians(90.0f), 0.0f};
+    Quaternion modelStandUpRotation = new Quaternion(myangles);
 
     public PlayerController(SceneLoader loader) {
         env = loader.getGameStageEnv();
@@ -76,46 +86,50 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
     public void init() {
         enableDebug();
 
-        placeholder = new Node();
+        playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(scLoader.foundation.capsuleradius), .1f);
+        playerPhysics.attachDebugShape(env.getAssetManager());
+        playerPhysics.setJumpSpeed(20);
+        playerPhysics.setFallSpeed(30);
+        playerPhysics.setGravity(30);
 
-     
+        playerPhysics.setLocalTranslation(scLoader.foundation.spawnpoint);
 
+                //Mesh
+        enableDebug();
+        Material mat_default = new Material(env.getAssetManager(), "Common/MatDefs/Misc/ShowNormals.j3md");
+        player = (Node) env.getAssetManager().loadModel(scLoader.foundation.playermesh);
 
-        //Player Node
-        Material mat_default = new Material(
-                env.getAssetManager(), "Common/MatDefs/Misc/ShowNormals.j3md");
-        player = (Node) env.getAssetManager().loadModel("Models/Player.j3o");
-    
+//        player.getWorldBound().
+
         player.setMaterial(mat_default);
-    centerModel();
-           
-        //Player Physics
 
-        BoundingBox  bbox = ((BoundingBox)player.getWorldBound());
-        CapsuleCollisionShape capsule = new CapsuleCollisionShape(2,10, 1);
+        playerPhysics.attachChild(player);
 
-        character = new PhysicsCharacterNode(capsule, 0.5f);
 
-                   character.setJumpSpeed(20);
-        character.setFallSpeed(30);
-        character.setGravity(30);
-        character.attachDebugShape(env.getAssetManager());
-        character.attachChild(player);
+        COGplaceholder = new Node("COG placeholder");
+     //   COGplaceholder.attachChild(boxDebug);
+        COGplaceholder.setLocalTranslation(new Vector3f(-2.56f, 9.0f, -7.318f));
 
-                       reorient();
-        //placeholder.attachChild(character);
+        baseplaceholder = new Node("base plholder");
+       // baseplaceholder.attachChild(baseDebug);
+        baseplaceholder.setLocalTranslation(new Vector3f(-2.56f, 9.0f, -2f));
+        player.attachChild(COGplaceholder);
+        player.attachChild(baseplaceholder);
+        reorient();
 
-        Vector3f spawn = scLoader.getSpawnPoint();
-        spawn.z -= 20;
-        character.setLocalTranslation(new Vector3f(0,40,0));
-       
-        scLoader.getLevel().attachChild(character);
-        scLoader.getGameStageEnv().getPhysicsSpace().add(character);
 
-        
+        control = player.getControl(AnimControl.class);
+        control.addListener(this);
+        channel = control.createChannel();
+        channel.setAnim("Start");
         setupKeys();
-        setupAnimationController();
-      setupChaseCamera();
+
+
+        env.getRootNode().attachChild(playerPhysics);
+        env.getPhysicsSpace().add(playerPhysics);
+        
+
+        setupChaseCamera();
 //        initKeys();
 //        control = player.getControl(AnimControl.class);
 //        control.addListener(this);
@@ -170,8 +184,8 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 //    };
 
     private void reorient() {
-       // character.scale(0.1f);
-   //   character.rotate((float) Math.toRadians(180.0f), (float) Math.toRadians(90.0f), 0.0f);
+             player.rotate(modelStandUpRotation);
+             centerOnPlaceholder(baseplaceholder);
     }
 
     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
@@ -186,9 +200,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         sysout.setText(str);
     }
 
-    public BoundingVolume getBoundingVolume() {
-        return player.getWorldBound();
-    }
+
 
     private void enableDebug() {
 //For debugging
@@ -204,15 +216,15 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
     public void update(float tpf)
     {
-        if(play)
+            if(play)
             return;
-
-        Vector3f camDir = env.getCamera().getDirection().clone().multLocal(0.2f);
-        Vector3f camLeft = env.getCamera().getLeft().clone().multLocal(0.2f);
+        LevelFoundation lf = scLoader.foundation;
+        Vector3f camDir = env.getCamera().getDirection().clone().multLocal(lf.playerspeed);
+        Vector3f camLeft = env.getCamera().getLeft().clone().multLocal(lf.playerspeed);
                camDir.y = 0;
         camLeft.y = 0;
         walkDirection.set(0, 0, 0);
-        modelDirection.set(0, 0, 0);
+        modelDirection.set(0, 0, 2);
         if (left) {
             walkDirection.addLocal(camLeft);
         }
@@ -225,39 +237,44 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         if (down) {
             walkDirection.addLocal(camDir.negate());
         }
-        if (!character.onGround()) {
+        if (!playerPhysics.onGround()) {
             airTime = airTime + tpf;
         } else {
             airTime = 0;
         }
 
-        int airtime = (int) airTime;
 
 
 
         if (walkDirection.length() == 0) {
-            if (!"Start".equals(animationChannel.getAnimationName()) && !play) {
-                animationChannel.setAnim("Start", 1f);
+            if (!"Start".equals(channel.getAnimationName()) && !play) {
+                channel.setAnim("Start", 0.0f);
+
             }
         } else {
-            modelRotation.lookAt(walkDirection.negate(), Vector3f.UNIT_Y);
+            modelRotation.lookAt(walkDirection, Vector3f.UNIT_Z);
+
             if (airTime > .3f) {
-                if (!"Start".equals(animationChannel.getAnimationName()) && !play) {
-                    animationChannel.setAnim("Start");
+                if (!"Start".equals(channel.getAnimationName()) && !play) {
+                    channel.setAnim("Start", 0.0f);
                 }
-            } else if (!"Walk".equals(animationChannel.getAnimationName())&& !play) {
-                animationChannel.setAnim("Walk", 0.7f);
+            } else if (!"Walk".equals(channel.getAnimationName())&& !play) {
+                channel.setAnim("Walk", 0.0f);
             }
         }
-        player.setLocalRotation(modelRotation);
+
+
+        Quaternion q = player.getWorldRotation();
+
+     //   player.rotate(modelRotation.mult(q));
         modelRotation.multLocal(modelDirection);
         modelRight.set(modelDirection);
         ROTATE_LEFT.multLocal(modelRight);
-        character.setWalkDirection(walkDirection);
+        playerPhysics.setWalkDirection(walkDirection);
     }
 
     public void onAction(String binding, boolean value, float tpf) {
-        if (binding.equals("CharLeft")) {
+         if (binding.equals("CharLeft")) {
             if (value) {
                 left = true;
             } else {
@@ -282,38 +299,24 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
                 down = false;
             }
         } else if (binding.equals("CharSpace")) {
-            character.jump();
+            playerPhysics.jump();
         } else if (binding.equals("CharKick") && !play) {
             play = true;
-            animationChannel.setAnim("Kick");
+            channel.setAnim("Kick");
         }
         else if (binding.equals("CharKneel") && !play) {
             play = true;
-            animationChannel.setAnim("Kneel");
+            channel.setAnim("Kneel");
         }
     }
 
-    private void centerModel()
-    {
-   //     player.setLocalTranslation(new Vector3f(3f,4,8.0f));
-        System.out.println("Centering");
-        System.out.println(player.getLocalRotation());
 
-        //PORQUE NO ROTAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!
-        player.rotate((float)Math.toRadians(90.0f),(float)Math.toRadians(0.0f),(float)Math.toRadians(0.0f));
-        System.out.println(player.getLocalRotation());
-    }
 
-     private void setupAnimationController() {
-        animationControl = player.getControl(AnimControl.class);
-        animationControl.addListener(this);
-        animationChannel = animationControl.createChannel();
-//        shootingChannel = animationControl.createChannel();
-////        System.out.println(animationControl.getSkeleton());
-//        shootingChannel.addBone(animationControl.getSkeleton().getBone("uparm.right"));
-//        shootingChannel.addBone(animationControl.getSkeleton().getBone("arm.right"));
-//        shootingChannel.addBone(animationControl.getSkeleton().getBone("hand.right"));
-    }
+//     private void setupAnimationController() {
+//        animationControl = player.getControl(AnimControl.class);
+//        animationControl.addListener(this);
+//        animationChannel = animationControl.createChannel();
+//    }
 
 
     public void collision(PhysicsCollisionEvent event) {
@@ -321,9 +324,38 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
     }
 
     private void setupChaseCamera() {
+          env.getCamera().setAxes(Vector3f.UNIT_X.negate(), Vector3f.UNIT_Y, Vector3f.UNIT_Z.negate());
         env.getFlyCamera().setEnabled(false);
-        chaseCam = new ChaseCamera(env.getCamera(), character, env.getInputManager());
+        chaseCam = new ChaseCamera(env.getCamera(), playerPhysics, env.getInputManager());
+      
+
 
     }
+
+        private void centerOnPlaceholder(Node placeholder) {
+
+
+
+        Vector3f offset = new Vector3f(placeholder.getWorldTranslation());
+
+        Vector3f origin = player.getParent().getWorldTranslation();
+//        System.out.println(origin);
+
+        origin.y -= scLoader.foundation.capsuleradius;
+
+        offset = offset.subtract(origin);
+//
+         if(offset.length() < 1)
+             return;
+//        System.out.println(placeholder.getWorldTranslation());
+//        System.out.println(origin);
+//        System.out.println(offset);
+        player.move(offset.negate());
+
+//        System.out.println(player.getWorldTranslation());
+
+
+    }
+
 
 }
