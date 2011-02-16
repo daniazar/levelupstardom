@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -8,12 +8,14 @@ package mygame.stage.stages;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import java.util.HashMap;
 import mygame.level.SceneLoader;
 import mygame.media.SoundManager;
 import mygame.model.Level;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 
+import com.google.gson.Gson;
 /**
  *
  * @author matiaspan
@@ -23,24 +25,25 @@ public class LevelStage extends GameStage {
     private GameStageEnvironment env;
     private Node level;
     private SceneLoader sceneLoader;
-
+    private LevelsConfig levels;
 
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
         this.env = env;
+        levels = new LevelsConfig("levels.json");
     }
 
     //Call this to load a level before jump to
-    public void loadLevel(Level level)
+    public void loadLevel(String filename)
   {
       sceneLoader = new SceneLoader();
-      String fname = level.getFilename();
-      //Retrieve the .obj filename from level filename
-      String objFile = "/Scenes/level1/level1.j3o";
+      LevelFoundation foundation = new LevelFoundation(filename);
+      System.out.println(foundation.scenefile);
+
       this.level = new Node();
       
       env.getRootNode().attachChild(this.level);
-      sceneLoader.init(objFile,this.level, env);
+      sceneLoader.init(foundation,this.level, env);
  
   }
     @Override

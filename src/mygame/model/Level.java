@@ -22,6 +22,10 @@ public class Level {
         return filename;
     }
 
+    public Level()
+    {
+        
+    }
     public Level(String name, String filename) {
         this.name = name;
         this.filename = filename;

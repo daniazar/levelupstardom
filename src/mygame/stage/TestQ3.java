@@ -47,6 +47,7 @@ import com.jme3.bullet.nodes.PhysicsNode;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
+import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -54,6 +55,8 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialList;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -69,6 +72,7 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
     private Spatial gameLevel;
     private PhysicsCharacterNode playerPhysics;
     private Vector3f walkDirection = new Vector3f();
+    private Vector3f savedWalkDirection = new Vector3f(0,0,0);
     private static boolean useHttp = false;
     private boolean left = false, right = false, up = false, down = false;
     //Player
@@ -77,7 +81,27 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
     private AnimChannel channel;
     private AnimControl control;
     private boolean play = false;//play or stop the animation
-    private float capsuleRadius = 5f;
+    private float capsuleRadius = 2.5f;
+
+    //Movement
+    static final Quaternion ROTATE_LEFT = new Quaternion();
+    Quaternion modelRotation = new Quaternion(Quaternion.IDENTITY);
+    Vector3f modelDirection = new Vector3f();
+    Vector3f modelRight = new Vector3f();
+
+    //To stand up the character in jme space from blender
+
+    float[] myangles = {(float) Math.toRadians(90.0f), (float) Math.toRadians(90.0f), 0.0f};
+    Quaternion modelStandUpRotation = new Quaternion(myangles);
+    Vector3f camDir = new Vector3f (-0.8660254f, 0.0f, 1.1920929E-7f);
+
+        float airTime = 0;
+
+        float playerSpeed = 0.5f;
+
+            static {
+        ROTATE_LEFT.fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
+    }
 
     public static void main(String[] args) {
         File file = new File("quake3level.zip");
@@ -92,7 +116,7 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        // flyCam.setMoveSpeed(100);
+        flyCam.setMoveSpeed(100);
 
         setupKeys();
 
@@ -119,7 +143,7 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) gameLevel);
 
         PhysicsNode levelNode = new PhysicsNode(gameLevel, levelShape, 0);
-        playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(capsuleRadius), .01f);
+        playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(capsuleRadius), .1f);
         playerPhysics.attachDebugShape(getAssetManager());
         playerPhysics.setJumpSpeed(20);
         playerPhysics.setFallSpeed(30);
@@ -160,9 +184,24 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         player.attachChild(COGplaceholder);
         player.attachChild(baseplaceholder);
         reorient();
+        float[] myangles = {(float) Math.toRadians(0.0f), (float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f)};
+        Quaternion q = new Quaternion(myangles);
+       
+        float[] anglesq = q.toAngles(null);
 
+        System.out.println("q is "+anglesq[0]+","+anglesq[1]+","+anglesq[2]);
+  
+        Quaternion playerq = player.getWorldRotation();
+        anglesq = playerq.toAngles(null);
+        System.out.println("player is "+anglesq[0]+","+anglesq[1]+","+anglesq[2]);
+        playerq.multLocal(q);
+        anglesq = q.toAngles(null);
+        System.out.println("mult player * q is "+anglesq[0]+","+anglesq[1]+","+anglesq[2]);
+     //   player.rotate(anglesq[0] , anglesq[1], anglesq[2]);
+        anglesq = player.getWorldRotation().toAngles(null);
+        System.out.println("end is "+anglesq[0]+","+anglesq[1]+","+anglesq[2]);
 
-        initKeys();
+//        initKeys();
 
         //setup animation and set to Start animation as named in Ogre exporter
 
@@ -182,11 +221,114 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         return bulletAppState.getPhysicsSpace();
     }
 
+//    @Override
+//    public void simpleUpdate(float tpf) {
+//        Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
+//        Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
+//        walkDirection.set(0, 0, 0);
+//        if (left) {
+//            walkDirection.addLocal(camLeft);
+//        }
+//        if (right) {
+//            walkDirection.addLocal(camLeft.negate());
+//        }
+//        if (up) {
+//            walkDirection.addLocal(camDir);
+//        }
+//        if (down) {
+//            walkDirection.addLocal(camDir.negate());
+//        }
+//        playerPhysics.setWalkDirection(walkDirection);
+//        cam.setLocation(playerPhysics.getLocalTranslation());
+//    }
+
+//    private void setupKeys() {
+//        inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_A));
+//        inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_D));
+//        inputManager.addMapping("Ups", new KeyTrigger(KeyInput.KEY_W));
+//        inputManager.addMapping("Downs", new KeyTrigger(KeyInput.KEY_S));
+//        inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
+//        inputManager.addListener(this, "Lefts");
+//        inputManager.addListener(this, "Rights");
+//        inputManager.addListener(this, "Ups");
+//        inputManager.addListener(this, "Downs");
+//        inputManager.addListener(this, "Space");
+//    }
+
+      private void setupKeys() {
+        InputManager inputManager = getInputManager();
+        inputManager.addMapping("wireframe", new KeyTrigger(KeyInput.KEY_T));
+        inputManager.addListener(this, "wireframe");
+        inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_L));
+        inputManager.addMapping("CharUp", new KeyTrigger(KeyInput.KEY_I));
+        inputManager.addMapping("CharDown", new KeyTrigger(KeyInput.KEY_K));
+        inputManager.addMapping("CharSpace", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("CharKneel", new KeyTrigger(KeyInput.KEY_N));
+        inputManager.addMapping("CharKick", new KeyTrigger(KeyInput.KEY_M));
+
+        inputManager.addListener(this, "CharLeft");
+        inputManager.addListener(this, "CharRight");
+        inputManager.addListener(this, "CharUp");
+        inputManager.addListener(this, "CharDown");
+        inputManager.addListener(this, "CharSpace");
+        inputManager.addListener(this, "CharKneel");
+        inputManager.addListener(this, "CharKick");
+    }
+
+
+    private void setupChaseCamera() {
+        flyCam.setEnabled(false);
+        chaseCam = new ChaseCamera(cam, playerPhysics, inputManager);
+                System.out.println("UP VECTOR CAM Q3");
+        System.out.println(getCamera().getUp());
+                System.out.println(getCamera().getLeft());
+                        System.out.println(getCamera().getDirection());
+
+    }
+
+//    public void onAction(String binding, boolean value, float tpf) {
+//
+//        if (binding.equals("Lefts")) {
+//            if (value) {
+//                left = true;
+//            } else {
+//                left = false;
+//            }
+//        } else if (binding.equals("Rights")) {
+//            if (value) {
+//                right = true;
+//            } else {
+//                right = false;
+//            }
+//        } else if (binding.equals("Ups")) {
+//            if (value) {
+//                up = true;
+//            } else {
+//                up = false;
+//            }
+//        } else if (binding.equals("Downs")) {
+//            if (value) {
+//                down = true;
+//            } else {
+//                down = false;
+//            }
+//        } else if (binding.equals("Space")) {
+//            playerPhysics.jump();
+//        }
+//    }
+
     @Override
     public void simpleUpdate(float tpf) {
-        Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
+        if(play)
+            return;
+
+        Vector3f camDir = getCamera().getDirection().clone().multLocal(playerSpeed);
+        Vector3f camLeft = getCamera().getLeft().clone().multLocal(playerSpeed);
+               camDir.y = 0;
+        camLeft.y = 0;
         walkDirection.set(0, 0, 0);
+        modelDirection.set(0, 0, 2);
         if (left) {
             walkDirection.addLocal(camLeft);
         }
@@ -199,119 +341,105 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         if (down) {
             walkDirection.addLocal(camDir.negate());
         }
+        if (!playerPhysics.onGround()) {
+            airTime = airTime + tpf;
+        } else {
+            airTime = 0;
+        }
+
+
+
+
+        if (walkDirection.length() == 0) {
+            if (!"Start".equals(channel.getAnimationName()) && !play) {
+                channel.setAnim("Start", 0.0f);
+    
+            }
+        } else {
+            modelRotation.lookAt(walkDirection, Vector3f.UNIT_Z);
+           
+            if (airTime > .3f) {
+                if (!"Start".equals(channel.getAnimationName()) && !play) {
+                    channel.setAnim("Start", 0.0f);
+                }
+            } else if (!"Walk".equals(channel.getAnimationName())&& !play) {
+                channel.setAnim("Walk", 0.0f);
+            }
+        }
+
+
+        Quaternion q = player.getWorldRotation();
+     
+     //   player.rotate(modelRotation.mult(q));
+        modelRotation.multLocal(modelDirection);
+        modelRight.set(modelDirection);
+        ROTATE_LEFT.multLocal(modelRight);
         playerPhysics.setWalkDirection(walkDirection);
-        cam.setLocation(playerPhysics.getLocalTranslation());
+      
     }
 
-    private void setupKeys() {
-        inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_A));
-        inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("Ups", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("Downs", new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addListener(this, "Lefts");
-        inputManager.addListener(this, "Rights");
-        inputManager.addListener(this, "Ups");
-        inputManager.addListener(this, "Downs");
-        inputManager.addListener(this, "Space");
-    }
 
-    private void setupChaseCamera() {
-        flyCam.setEnabled(false);
-        chaseCam = new ChaseCamera(cam, playerPhysics, inputManager);
-
-    }
-
-    public void onAction(String binding, boolean value, float tpf) {
-
-        if (binding.equals("Lefts")) {
-            if (value) {
-                left = true;
-            } else {
-                left = false;
-            }
-        } else if (binding.equals("Rights")) {
-            if (value) {
-                right = true;
-            } else {
-                right = false;
-            }
-        } else if (binding.equals("Ups")) {
-            if (value) {
-                up = true;
-            } else {
-                up = false;
-            }
-        } else if (binding.equals("Downs")) {
-            if (value) {
-                down = true;
-            } else {
-                down = false;
-            }
-        } else if (binding.equals("Space")) {
-            playerPhysics.jump();
-        }
-    }
-
-    private void initKeys() {
-        inputManager.addMapping("ccw", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("cw", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("play", new KeyTrigger(KeyInput.KEY_P));
-        inputManager.addMapping("kneel", new KeyTrigger(KeyInput.KEY_O));
-        inputManager.addMapping("kick", new KeyTrigger(KeyInput.KEY_L));
-
-        inputManager.addListener(actionListener, "ccw");
-        inputManager.addListener(actionListener, "cw");
-        inputManager.addListener(actionListener, "play");
-        inputManager.addListener(actionListener, "kneel");
-        inputManager.addListener(actionListener, "kick");
-
-    }
-    private ActionListener actionListener = new ActionListener() {
-
-        public void onAction(String name, boolean keyPressed, float tpf) {
-            debug(name);
-            if (name.equals("ccw")) {
-                COGplaceholder.rotate(90.0f, 0.0f, 0f);
-            }
-            if (name.equals("cw")) {
-                COGplaceholder.rotate(-90.0f, 0.0f, 0f);
-            }
-            if (name.equals("play") && !keyPressed) {
-                if (!play) {
-                    channel.setAnim("Walk", 0.0f);
-                    channel.setLoopMode(LoopMode.Loop);
-                    play = true;
-                } else {
-                    channel.setAnim("Start", 0.0f);
-                    play = false;
-                }
-            } else if (name.equals("kneel")) {
-                if (!play) {
-                    channel.setAnim("Kneel", 0.0f);
-                   // channel.setLoopMode(LoopMode.Loop);
-                    play = true;
-                } else {
-                    channel.setAnim("Start", 0f);
-                    play = false;
-                }
-            } else if (name.equals("kick")) {
-                if (!play) {
-                    channel.setAnim("Kick", 0f);
-                 //   channel.setLoopMode(LoopMode.Loop);
-                    play = true;
-                } else {
-                    channel.setAnim("Start", 0.0f);
-                    play = false;
-                }
-            }
-
-        }
-    };
+//    private void initKeys() {
+//        inputManager.addMapping("ccw", new KeyTrigger(KeyInput.KEY_LEFT));
+//        inputManager.addMapping("cw", new KeyTrigger(KeyInput.KEY_RIGHT));
+//        inputManager.addMapping("play", new KeyTrigger(KeyInput.KEY_P));
+//        inputManager.addMapping("kneel", new KeyTrigger(KeyInput.KEY_O));
+//        inputManager.addMapping("kick", new KeyTrigger(KeyInput.KEY_L));
+//
+//        inputManager.addListener(actionListener, "ccw");
+//        inputManager.addListener(actionListener, "cw");
+//        inputManager.addListener(actionListener, "play");
+//        inputManager.addListener(actionListener, "kneel");
+//        inputManager.addListener(actionListener, "kick");
+//
+//    }
+//    private ActionListener actionListener = new ActionListener() {
+//
+//        public void onAction(String name, boolean keyPressed, float tpf) {
+//            debug(name);
+//            if (name.equals("ccw")) {
+//                COGplaceholder.rotate(90.0f, 0.0f, 0f);
+//            }
+//            if (name.equals("cw")) {
+//                COGplaceholder.rotate(-90.0f, 0.0f, 0f);
+//            }
+//            if (name.equals("play") && !keyPressed) {
+//                if (!play) {
+//                    channel.setAnim("Walk", 0.0f);
+//                    channel.setLoopMode(LoopMode.Loop);
+//                    play = true;
+//                } else {
+//                    channel.setAnim("Start", 0.0f);
+//                    play = false;
+//                }
+//            } else if (name.equals("kneel")) {
+//                if (!play) {
+//                    channel.setAnim("Kneel", 0.0f);
+//                   // channel.setLoopMode(LoopMode.Loop);
+//                    play = true;
+//                } else {
+//                    channel.setAnim("Start", 0f);
+//                    play = false;
+//                }
+//            } else if (name.equals("kick")) {
+//                if (!play) {
+//                    channel.setAnim("Kick", 0f);
+//                 //   channel.setLoopMode(LoopMode.Loop);
+//                    play = true;
+//                } else {
+//                    channel.setAnim("Start", 0.0f);
+//                    play = false;
+//                }
+//            }
+//
+//        }
+//    };
 
 //need to implement listener methods
     public void onAnimCycleDone(AnimControl control, AnimChannel channel,
             String name) {
+                play = false;
+        channel.setAnim("Start");
     }
 
     public void onAnimChange(AnimControl control, AnimChannel channel, String name) {
@@ -331,10 +459,27 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         sysout.setText(str);
     }
 
-    private void reorient() {
+    private void reorient( ) {
 
-        player.rotate((float) Math.toRadians(90.0f), (float) Math.toRadians(90.0f), 0.0f);
+//        //Initial rotation
+//
+//
+//     //   player.rotate(modelStandUpRotation);
+//        float[] angles;
+//        angles =  player.getLocalRotation().toAngles(null);
+//        System.out.println("Base char rotation standing"+ angles[0]+","+angles[1]+","+angles[2]);
+//
+//        angles = new float[]{(float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f)};
+//
+ //       Quaternion q = new Quaternion(angles);
 
+      
+        player.rotate(modelStandUpRotation);
+        
+//
+//
+//        angles =  player.getLocalRotation().toAngles(null);
+//        System.out.println("Base char rotation "+ angles[0]+","+angles[1]+","+angles[2]);
         centerOnPlaceholder(baseplaceholder);
 
         //root.setLocalTranslation(new Vector3f(0.0f, -2.5f, 0.0f));
@@ -343,6 +488,36 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         //  flyCam.setEnabled(true);
     }
 
+    private void rotatePlayer()
+    {
+        //If the walk direction has changed I should rotate him once.
+        if(savedWalkDirection.equals(walkDirection))
+            return;
+
+        camDir = getCamera().getDirection();
+        camDir.y = 0;
+        camDir.normalizeLocal();
+        walkDirection.normalizeLocal();
+        //Find Angle
+        float angle = camDir.angleBetween(walkDirection);
+        System.out.println("walk"+walkDirection);
+        System.out.println("Cam dir"+camDir);
+        
+        System.out.println("Angle "+ angle);
+        if(angle < 0.1f)
+            return;
+
+        float[] angles = {0,0,angle};
+        Quaternion q = new Quaternion(angles);
+
+        Quaternion playerq = player.getWorldRotation();
+
+        playerq.multLocal(q);
+     //   reorient(q);
+        player.rotate(q);
+        
+
+    }
     private void centerOnPlaceholder(Node placeholder) {
 
         
@@ -350,19 +525,59 @@ public class TestQ3 extends SimpleApplication implements ActionListener, AnimEve
         Vector3f offset = new Vector3f(placeholder.getWorldTranslation());
       
         Vector3f origin = player.getParent().getWorldTranslation();
-        System.out.println(origin);
-        origin.y -= capsuleRadius;
+//        System.out.println(origin);
+
+    origin.y -= capsuleRadius;
  
         offset = offset.subtract(origin);
-
-        System.out.println(placeholder.getWorldTranslation());
-        System.out.println(origin);
-        System.out.println(offset);
+//
+         if(offset.length() < 1)
+             return;
+//        System.out.println(placeholder.getWorldTranslation());
+//        System.out.println(origin);
+//        System.out.println(offset);
         player.move(offset.negate());
        
-        System.out.println(player.getWorldTranslation());
+//        System.out.println(player.getWorldTranslation());
 
 
+    }
+
+    public void onAction(String binding, boolean value, float tpf) {
+        if (binding.equals("CharLeft")) {
+            if (value) {
+                left = true;
+            } else {
+                left = false;
+            }
+        } else if (binding.equals("CharRight")) {
+            if (value) {
+                right = true;
+            } else {
+                right = false;
+            }
+        } else if (binding.equals("CharUp")) {
+            if (value) {
+                up = true;
+            } else {
+                up = false;
+            }
+        } else if (binding.equals("CharDown")) {
+            if (value) {
+                down = true;
+            } else {
+                down = false;
+            }
+        } else if (binding.equals("CharSpace")) {
+            playerPhysics.jump();
+        } else if (binding.equals("CharKick") && !play) {
+            play = true;
+            channel.setAnim("Kick");
+        }
+        else if (binding.equals("CharKneel") && !play) {
+            play = true;
+            channel.setAnim("Kneel");
+        }
     }
 
 
