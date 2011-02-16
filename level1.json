@@ -1,0 +1,42 @@
+{
+
+        "scenefile": "quake3level.zip",
+        "scenetype": "zip",
+	"playermesh": "Models/Chest.j3o",
+	"capsuleradius":2.5,
+	"playerspeed": 0.5,
+        "spawnpoint": {
+            "x": 60.0,
+            "y": 10.0,
+            "z": -60.0
+        },
+        "goal": {
+            "x": 28.25,
+            "y": 20.0,
+            "z": 30.0
+        },
+        "goalextent": {
+            "x": 28.25,
+            "y": 20.0,
+            "z": 30.0
+        },
+        "spheres": {
+            "1":{
+                "pos": {
+                    "x": 60.25,
+                    "y": 10.0,
+                    "z": -60.0
+                },
+                "radius": 4
+            },
+            "2":{
+                "pos": {
+                    "x": 28.25,
+                    "y": 20.0,
+                    "z": 30.0
+                },
+                "radius": 4
+            }
+        }
+    
+}

@@ -1,0 +1,16 @@
+{
+    "levels": {
+        "1": {
+            "name": "Beginner",
+            "filename": "level1.json"
+        },
+  	 "2": {
+            "name": "Intermediate",
+            "filename": "level1.json"
+        },
+   	"3": {
+            "name": "Advanced",
+            "filename": "level1.json"
+        }
+    }
+}
