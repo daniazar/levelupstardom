@@ -3,7 +3,7 @@
     "scenetype": "zip",
     "playermesh": "Models/Chest.j3o",
     "capsuleradius": 3.0,
-    "playerspeed": 0.2,
+    "playerspeed": 0.1,
     "time": 200.0,
     "spawnpoint": {
         "x": 60.0,
@@ -104,6 +104,20 @@
                 "z": 40 
             },
             "dot": 20 
+        } 
+    },
+    "brickWalls": {
+        "1": {
+            "pos": {
+                "x": -214.92531,  
+                "y": -30, 
+                "z": -14   
+            },
+            "brickDimension": {
+                "x": 1,
+                "y": 0.4,
+                "z": 0.7 
+            }
         } 
     },
     "interruptors": {

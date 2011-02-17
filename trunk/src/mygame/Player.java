@@ -112,8 +112,6 @@ public class Player implements ActionListener, PhysicsCollisionListener, AnimEve
         bullet = new Sphere(32, 32, 0.4f, true, false);
         bullet.setTextureMode(TextureMode.Projected);
         bulletCollisionShape = new SphereCollisionShape(0.4f);
-        matBullet = new Material(env.getAssetManager(), "Common/MatDefs/Misc/WireColor.j3md");
-        matBullet.setColor("m_Color", ColorRGBA.Green);
         env.getPhysicsSpace().addCollisionListener(this);
     }
 
