@@ -32,12 +32,18 @@ public class ObjectUtil {
     private GameStageEnvironment env;
   /** brick dimensions */
   private  float brickLength = 5f;
-  private  float brickWidth = 2f;
-  private  float brickHeight = 1f;
+  private  float brickWidth = 80f;
+  private  float brickHeight = 10f;
+
+  private float doorLength = 5f;
+  private  float doorWidth = 80f;
+  private  float doorHeight = 10f;
   /** geometries and collisions shapes for bricks and cannon balls. */
   private BulletAppState bulletAppState;
   private static  Box  brick;
+   private static  Box  door;
   private static  BoxCollisionShape boxCollisionShape;
+  private static  BoxCollisionShape doorCollisionShape;
   private static final Sphere cannonball;
   private static final SphereCollisionShape cannonballCollisionShape;
 
@@ -45,6 +51,7 @@ public class ObjectUtil {
   Material wall_mat;
   Material stone_mat;
   Material floor_mat;
+  Material door_mat;
 
 
     public ObjectUtil(GameStageEnvironment env) {
@@ -81,6 +88,15 @@ public class ObjectUtil {
     Texture tex3 = env.getAssetManager().loadTexture(key3);
     tex3.setWrap(WrapMode.Repeat);
     floor_mat.setTexture("m_ColorMap", tex3);
+
+        door_mat = new Material( env.getAssetManager(), "Common/MatDefs/Misc/SimpleTextured.j3md");
+       TextureKey key4 = new TextureKey("Textures/door.jpg");
+       key4.setGenerateMips(true);
+       Texture tex4 = env.getAssetManager().loadTexture(key4);
+       tex4.setWrap(WrapMode.BorderClamp);
+
+       door_mat.setTexture("m_ColorMap", tex4);
+//
   }
 
 
@@ -100,6 +116,20 @@ public class ObjectUtil {
     env.getPhysicsSpace().add(brickNode);
   }
 
+  public void makeDoor(Vector3f ori, Node rootNode)
+    {
+          Geometry box_geo = new Geometry("door", door);
+    box_geo.setMaterial(door_mat);
+    PhysicsNode brickNode = new PhysicsNode(
+     box_geo,      // geometry
+     doorCollisionShape, // collision shape
+     1.5f);       // mass
+    /** position the brick and activate shadows */
+    brickNode.setLocalTranslation(ori);
+    brickNode.setShadowMode(ShadowMode.CastAndReceive);
+    rootNode.attachChild(brickNode);
+    env.getPhysicsSpace().add(brickNode);
+  }
   /** This method creates one individual physical cannon ball.
    * By defaul, the ball is accelerated and flies
    * from the camera position in the camera direction.*/
@@ -159,4 +189,16 @@ public class ObjectUtil {
     }
   }
 
+  public void initDoor(Node rootNode, Vector3f dim)
+    {
+              doorLength = dim.x;
+        doorWidth = dim.z;
+        doorHeight = dim.y;
+             door = new Box(Vector3f.ZERO, dim.x   , dim.y, dim.z);
+    door.scaleTextureCoordinates(new Vector2f(1f, .5f));
+    doorCollisionShape = new BoxCollisionShape(new Vector3f(dim.x, dim.y, dim.z));
+
+       Vector3f vt =  new Vector3f( doorLength, doorHeight, 0);
+        makeDoor(vt, rootNode);
+    }
 }
