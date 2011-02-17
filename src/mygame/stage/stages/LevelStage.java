@@ -30,7 +30,7 @@ public class LevelStage extends GameStage {
     private Node level;
     private SceneLoader sceneLoader;
     private LevelsConfig levels;
-    private GameInstanceManager gameInstanceManager;
+    public GameInstanceManager gameInstanceManager;
 
    private int currentlevel;
 

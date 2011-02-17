@@ -6,7 +6,9 @@
 package mygame.stage.stages;
 
 import java.awt.Dimension;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import jme3ui.event.action.UIAction;
@@ -18,6 +20,7 @@ import jme3ui.widgets.UIPanel;
 import mygame.model.Level;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
+import mygame.util.HighScores;
 
 public class LevelSelect extends GameStage {
     private final UIFrame FRAME;
@@ -91,6 +94,11 @@ public class LevelSelect extends GameStage {
         {
             System.out.println("Game FINISHED");
             env.getLevelStage().stop();
+            String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+
+            HighScores.getInstance().addHighScore(sdf.format(cal.getTime()), ((LevelStage) env.getLevelStage()).gameInstanceManager.getScore(), HighScores.ScoreType.SCORE_TIME);
              jumpTo(GameOverStage.class.getName());
         }
         else
