@@ -178,7 +178,7 @@ public class ObjectUtil {
     boxCollisionShape = new BoxCollisionShape(new Vector3f(brickLength, brickHeight, brickWidth));
     float startpt = brickLength / 4;
     float height = 0;
-    for (int j = 0; j < 15; j++) {
+    for (int j = 0; j < 5; j++) {
       for (int i = 0; i < 4; i++) {
         Vector3f vt =
          new Vector3f(i * brickLength * 2 + startpt, brickHeight + height, 0);
