@@ -177,10 +177,7 @@ public class SceneLoader {
 
             env.getPhysicsSpace().add(levelPhyNode);
 
-            BrickWall b = new BrickWall(new Vector3f(94, 1, -18), new Vector3f(5, 2, 1));
-            levelPhyNode.attachChild(b.node);
-            b.init(env);
-
+            
 
 
         }
