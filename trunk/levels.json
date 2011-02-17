@@ -6,11 +6,11 @@
         },
         "2": {
             "name": "Intermediate",
-            "filename": "level1.json" 
+            "filename": "level2.json" 
         },
         "3": {
             "name": "Advanced",
-            "filename": "level1.json" 
+            "filename": "level2.json" 
         } 
     }
 }
