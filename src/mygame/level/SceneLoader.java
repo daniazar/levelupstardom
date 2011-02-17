@@ -20,11 +20,13 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialList;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.ogre.OgreMeshKey;
 import java.util.ArrayList;
 import mygame.PlayerController;
 import mygame.media.SoundManager;
+import mygame.model.BrickWall;
 import mygame.model.GameInstanceManager;
 import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStageEnvironment;
@@ -33,6 +35,7 @@ import mygame.model.Interruptor;
 import mygame.stage.stages.LevelFoundation;
 import mygame.stage.stages.LevelStage;
 import mygame.stage.stages.PickableSpheres;
+import mygame.util.ObjectUtil;
 
 /**
  *
@@ -174,6 +177,12 @@ public class SceneLoader {
 
 
         env.getPhysicsSpace().add(levelPhyNode);
+
+        ObjectUtil util = new ObjectUtil(env);
+
+        BrickWall b = new BrickWall(new Vector3f(94, 1, -18), new Vector3f(5, 2, 1));
+        levelPhyNode.attachChild(b.node);
+        b.init(env);
 
     // We set up collision detection for the player by creating
     // a capsule collision shape and a physics character node.
