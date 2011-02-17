@@ -10,6 +10,8 @@ import com.jme3.scene.Node;
 import com.jme3.util.SkyFactory;
 import mygame.level.SceneLoader;
 import mygame.media.SoundManager;
+import mygame.model.GameInstanceManager;
+import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 
@@ -23,11 +25,13 @@ public class LevelStage extends GameStage {
     private Node level;
     private SceneLoader sceneLoader;
     private LevelsConfig levels;
+    private GameInstanceManager gameInstanceManager;
 
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
         this.env = env;
         levels = new LevelsConfig("levels.json");
+        gameInstanceManager = new PickupGameInstanceManager();
     }
 
     //Call this to load a level before jump to

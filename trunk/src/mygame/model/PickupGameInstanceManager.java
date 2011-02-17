@@ -14,6 +14,11 @@ public class PickupGameInstanceManager implements GameInstanceManager {
     private int energy;
     private float score;
 
+    public PickupGameInstanceManager() {
+        energy = 100;
+        score = 0;
+    }
+    
     public boolean isGameOver() {
         return energy <= 0;
     }
