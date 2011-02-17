@@ -24,6 +24,7 @@ import com.jme3.scene.plugins.ogre.OgreMeshKey;
 import java.util.ArrayList;
 import mygame.PlayerController;
 import mygame.stage.GameStageEnvironment;
+import mygame.stage.stages.Hazard;
 import mygame.stage.stages.LevelFoundation;
 import mygame.stage.stages.PickableSpheres;
 
@@ -56,7 +57,7 @@ public class SceneLoader {
         }
 
         addPickupObjects();
-
+        addHazardAreas();
 
         //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
         //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
@@ -103,7 +104,7 @@ public class SceneLoader {
 ////        env.getPhysicsSpace().add(physicsSphere2);
 //
 
-        env.getFlyCamera().setMoveSpeed(100);
+        env.getFlyCamera().setMoveSpeed(50);
 
 
 
@@ -203,6 +204,15 @@ public class SceneLoader {
             env.getRootNode().attachChild(sphere.geom);
         }
 
+    }
+
+    private void addHazardAreas()
+    {
+        for(Hazard hazard : foundation.hazards.values())
+        {
+            hazard.init(env);
+            env.getRootNode().attachChild(hazard.geom);
+        }
     }
 
     private void updatePickUpCollisions(float tpf)
