@@ -44,9 +44,12 @@ public class BrickWall {
     {
         node.setLocalTransform(new Transform(pos));
         ObjectUtil util = new ObjectUtil(env);
-
+        System.out.println("bricks" + pos + brickDimension );
         util.initWall(node, brickDimension);
 
     }
+
+
+    
 
 }
