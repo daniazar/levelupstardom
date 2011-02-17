@@ -13,9 +13,23 @@ import java.util.Timer;
  */
 public class PickupGameInstanceManager implements GameInstanceManager {
 
-    private int energy;
+    private float energy;
     private float score;
 
+    private static PickupGameInstanceManager instance;
+
+    public static GameInstanceManager getInstance() {
+        if (instance == null) {
+            instance = new PickupGameInstanceManager();
+        }
+        return instance;
+    }
+
+    public static GameInstanceManager getNewInstance() {
+        instance = new PickupGameInstanceManager();
+        return instance;
+    }
+    
     public PickupGameInstanceManager() {
         energy = 100;
         score = 0;
@@ -30,7 +44,7 @@ public class PickupGameInstanceManager implements GameInstanceManager {
     }
 
     public int getEnergyLeft() {
-        return energy;
+        return (int)energy;
     }
 
     public void damageCharacter(float damage) {

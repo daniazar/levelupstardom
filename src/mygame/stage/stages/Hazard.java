@@ -24,8 +24,8 @@ public class Hazard {
     public Vector3f pos;
     public Vector3f extent;
     //Damage over Time
-    float dot;
-        public Geometry geom;
+    public float dot;
+    public Geometry geom;
 
     public Hazard()
     {
