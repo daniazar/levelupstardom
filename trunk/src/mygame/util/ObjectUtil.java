@@ -31,13 +31,13 @@ public class ObjectUtil {
 
     private GameStageEnvironment env;
   /** brick dimensions */
-  private static final float brickLength = 0.48f;
-  private static final float brickWidth = 0.24f;
-  private static final float brickHeight = 0.12f;
+  private  float brickLength = 5f;
+  private  float brickWidth = 2f;
+  private  float brickHeight = 1f;
   /** geometries and collisions shapes for bricks and cannon balls. */
   private BulletAppState bulletAppState;
-  private static final Box  brick;
-  private static final BoxCollisionShape boxCollisionShape;
+  private static  Box  brick;
+  private static  BoxCollisionShape boxCollisionShape;
   private static final Sphere cannonball;
   private static final SphereCollisionShape cannonballCollisionShape;
 
@@ -49,6 +49,7 @@ public class ObjectUtil {
 
     public ObjectUtil(GameStageEnvironment env) {
         this.env = env;
+        initMaterials();
     }
 
 
@@ -58,10 +59,7 @@ public class ObjectUtil {
     cannonball.setTextureMode(TextureMode.Projected);
     cannonballCollisionShape=new SphereCollisionShape(0.4f);
     /** initializing the brick geometry that is reused later */
-    brick = new Box(Vector3f.ZERO, brickLength, brickHeight, brickWidth);
-    brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
-    boxCollisionShape = new BoxCollisionShape(new Vector3f(brickLength, brickHeight, brickWidth));
-  }
+    }
 
 /** Initialize the materials used in this scene. */
   public void initMaterials() {
@@ -141,7 +139,13 @@ public class ObjectUtil {
   }
 
   /** A loop that builds a wall out of individual bricks. */
-  public void initWall(Node rootNode) {
+  public void initWall(Node rootNode, Vector3f dim) {
+        brickLength = dim.x;
+        brickWidth = dim.z;
+        brickHeight = dim.y;
+        brick = new Box(Vector3f.ZERO, brickLength, brickHeight, brickWidth);
+    brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
+    boxCollisionShape = new BoxCollisionShape(new Vector3f(brickLength, brickHeight, brickWidth));
     float startpt = brickLength / 4;
     float height = 0;
     for (int j = 0; j < 15; j++) {

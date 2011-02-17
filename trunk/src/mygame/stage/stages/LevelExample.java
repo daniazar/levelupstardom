@@ -88,7 +88,7 @@ public class LevelExample extends GameStage {
         /** Initialize the scene and physics space */
         util = new ObjectUtil(env);
         util.initMaterials();
-         util.initWall(node);
+        // util.initWall(node);
         util.initFloor(node);
         env.getPhysicsSpace().setAccuracy(0.005f);
 
