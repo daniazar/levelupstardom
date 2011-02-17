@@ -14,6 +14,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import java.awt.Dimension;
+import mygame.stage.stages.LevelStage;
 //import jme3clogic.TriggerSystem;
 
 public interface GameStageEnvironment {
@@ -49,5 +50,11 @@ public interface GameStageEnvironment {
     public ViewPort getViewPort();
 
     GameStage getLevelStage();
+
+    void jumpToMainMenu();
+
+    void GameOver();
+
+    void setLevelStage(LevelStage stage);
 
 }

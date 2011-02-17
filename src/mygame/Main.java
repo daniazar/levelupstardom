@@ -49,7 +49,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
    // private final TriggerSystem triggerSystem = new TriggerSystem();
    // private MouseCamera mcam;
     private GameStage levelStage;
-
+    private MainMenu mainMenu;
     public static GameStage CURRENT;
 
     public static void main(String[] args) {
@@ -114,7 +114,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
         SoundManager.initSoundManager(this.getAssetManager(), this.getAudioRenderer());
 
-        MainMenu mainMenu = new MainMenu(this);
+         mainMenu = new MainMenu(this);
 	mainMenu.addChild(new Settings(this));
         mainMenu.addChild(new LevelSelect(this));
         mainMenu.addChild(highScoreMenu);
@@ -125,7 +125,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         mainMenu.addChild(new LevelExample(this));
 	mainMenu.jumpTo(MainMenu.class.getName());
 
-        gameOverStage.mainMenu = mainMenu;
+  //      gameOverStage.mainMenu = mainMenu;
     }
 
     @Override
@@ -177,5 +177,19 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
     public GameStage getLevelStage() {
         return levelStage;
     }
+
+    public void GameOver() {
+        getLevelStage().stop();
+        mainMenu.jumpTo(GameOverStage.class.getName());
+    }
+
+    public void jumpToMainMenu() {
+        mainMenu.jumpTo(MainMenu.class.getName());
+    }
+
+    public void setLevelStage(LevelStage stage) {
+       levelStage = stage;
+    }
+
 
 }

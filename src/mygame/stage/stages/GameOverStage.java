@@ -28,11 +28,13 @@ public class GameOverStage extends GameStage {
         button.addUIActionListener(new UIActionListener() {
 
             public void onUIAction(UIAction action) {
+                GameOverStage.this.env.getRootNode().detachAllChildren();
                 HighscoreMenu highScoreMenu = new HighscoreMenu(GameOverStage.this.env);
                 highScoreMenu.addChild(new TimeHighscores(GameOverStage.this.env));
                 highScoreMenu.addChild(new ObjectHighscores(GameOverStage.this.env));
 
                 LevelStage levelStage = new LevelStage(GameOverStage.this.env);
+                GameOverStage.this.env.setLevelStage(levelStage);
                 GameOverStage gameOverStage = new GameOverStage(GameOverStage.this.env);
 
                 MainMenu mainMenu = new MainMenu(GameOverStage.this.env);

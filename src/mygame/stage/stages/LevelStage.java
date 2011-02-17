@@ -68,6 +68,7 @@ public class LevelStage extends GameStage {
   }
     @Override
     public void start() {
+
         initializeCamera();
         SoundManager.stopMenuBGM();
         SoundManager.playGameBGM();
@@ -75,7 +76,7 @@ public class LevelStage extends GameStage {
     }
 
     private void createSky() {
-        env.getRootNode().attachChild(SkyFactory.createSky(env.getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", false));
+        int attachChild = level.attachChild(SkyFactory.createSky(env.getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", false));
     }
 
     private void initializeCamera(){
@@ -93,8 +94,9 @@ public class LevelStage extends GameStage {
     @Override
     public void stop() {
         
-        env.getRootNode().detachAllChildren();
-        
+        sceneLoader.stop();
+        env.getRootNode().detachChild(level);
+        env.getGuiNode().detachAllChildren();
 	getGameStageEnvironment().getInputManager().setCursorVisible(false);
 
     }

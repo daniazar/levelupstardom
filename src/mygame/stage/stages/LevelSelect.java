@@ -41,7 +41,7 @@ public class LevelSelect extends GameStage {
             if(levelFilename.equals("nivel2.lvl"))
                 jumpTo("LevelExample");
             levelStage.loadLevel(levelFilename);
- 
+            System.out.println(levelFilename);
             jumpTo("LevelStage");
 
         }

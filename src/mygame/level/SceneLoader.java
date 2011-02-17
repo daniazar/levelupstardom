@@ -58,7 +58,7 @@ public class SceneLoader {
         this.foundation = foundation;
 
         levelNode = level;
-
+        env.getRootNode().attachChild(levelNode);
         if (foundation.scenetype.equals("zip")) {
             loadZipScene();
         } else {
@@ -100,7 +100,7 @@ public class SceneLoader {
         // Add a physics sphere to the world
         PhysicsNode physicsSphere = new PhysicsNode(new SphereCollisionShape(1), 1);
 
-        physicsSphere.setLocalTranslation(new Vector3f(0, 20, 0));
+        physicsSphere.setLocalTranslation(new Vector3f(60, -14, 60));
         physicsSphere.attachDebugShape(env.getAssetManager());
         physicsSphere.addCollideWithGroup(PhysicsNode.COLLISION_GROUP_02);
         level.attachChild(physicsSphere);
@@ -111,7 +111,7 @@ public class SceneLoader {
 ////        physicsSphere2.setLocalTranslation(Vector3f.ZERO);
 ////        physicsSphere2.attachDebugShape(mat2);
 ////        physicsSphere2.addCollideWithGroup(PhysicsNode.COLLISION_GROUP_02);
-////        env.getRootNode().attachChild(physicsSphere2);
+////        levelNode.attachChild(physicsSphere2);
 ////        env.getPhysicsSpace().add(physicsSphere2);
 //
 
@@ -124,14 +124,14 @@ public class SceneLoader {
         DirectionalLight dl = new DirectionalLight();
         dl.setColor(ColorRGBA.White.clone().multLocal(2));
         dl.setDirection(new Vector3f(-1, -1, -1).normalize());
-        env.getRootNode().addLight(dl);
+        levelNode.addLight(dl);
 
         for (Vector3f plPosition : foundation.pointLightPositions) {
             PointLight pl = new PointLight();
             pl.setColor(ColorRGBA.randomColor().clone().multLocal(2));
             pl.setPosition(plPosition);
             pl.setRadius(40);
-            env.getRootNode().addLight(pl);
+            levelNode.addLight(pl);
         }
     }
 
@@ -245,11 +245,7 @@ public class SceneLoader {
         player.init();
     }
 
-    private void reorient() {
-        //   levelNode.rotate((float) Math.toRadians(180.0f), (float) Math.toRadians(
-        //        90.0f), (float) Math.toRadians(0.0f));
-        //levelNode.setLocalTranslation(new Vector3f(0.0f, -2.5f, 0.0f));
-    }
+
 
     public void update(float tpf) {
         player.update(tpf);
@@ -259,13 +255,19 @@ public class SceneLoader {
         updateInterruptorCollisions(tpf);
     }
 
+    public void stop()
+    {
+        player.stop();
+        env.getRootNode().detachChild(levelPhyNode);
+        env.getRootNode().detachChild(levelNode);
+    }
 
     private void addPickupObjects()
     {
         for(PickableSpheres sphere : foundation.spheres.values())
         {
             sphere.init(env);
-            env.getRootNode().attachChild(sphere.geom);
+            levelPhyNode.attachChild(sphere.geom);
         }
 
     }
@@ -275,7 +277,7 @@ public class SceneLoader {
         for(Hazard hazard : foundation.hazards.values())
         {
             hazard.init(env);
-            env.getRootNode().attachChild(hazard.geom);
+            levelPhyNode.attachChild(hazard.geom);
         }
     }
 
@@ -286,7 +288,7 @@ public class SceneLoader {
             interruptor.init(env);
             interruptor.obstacle.init(env);
 
-            env.getRootNode().attachChild(interruptor.geom);
+            levelPhyNode.attachChild(interruptor.geom);
 
         }
     }
@@ -294,7 +296,7 @@ public class SceneLoader {
     private void addGoal()
     {
         foundation.goal.init(env);
-        env.getRootNode().attachChild(foundation.goal.geom);
+        levelPhyNode.attachChild(foundation.goal.geom);
     }
 
     private void updatePickUpCollisions(float tpf)
