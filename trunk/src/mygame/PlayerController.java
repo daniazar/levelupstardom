@@ -81,8 +81,8 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         enableDebug();
 
         playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(scLoader.foundation.capsuleradius), .1f);
-        playerPhysics.attachDebugShape(env.getAssetManager());
-        playerPhysics.setCollisionGroup(playerPhysics.COLLISION_GROUP_01);
+       // playerPhysics.attachDebugShape(env.getAssetManager());
+       // playerPhysics.setCollisionGroup(playerPhysics.COLLISION_GROUP_01);
         playerPhysics.setJumpSpeed(70);
         playerPhysics.setFallSpeed(90);
         playerPhysics.setGravity(100);
@@ -146,12 +146,12 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         InputManager inputManager = env.getInputManager();
         inputManager.addMapping("wireframe", new KeyTrigger(KeyInput.KEY_T));
         inputManager.addListener(this, "wireframe");
-        inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_J));
-        inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_L));
-        inputManager.addMapping("CharUp", new KeyTrigger(KeyInput.KEY_I));
-        inputManager.addMapping("CharDown", new KeyTrigger(KeyInput.KEY_K));
+        inputManager.addMapping("CharLeft", new KeyTrigger(KeyInput.KEY_A));
+        inputManager.addMapping("CharRight", new KeyTrigger(KeyInput.KEY_D));
+        inputManager.addMapping("CharUp", new KeyTrigger(KeyInput.KEY_W));
+        inputManager.addMapping("CharDown", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("CharSpace", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("CharKneel", new KeyTrigger(KeyInput.KEY_N));
+        inputManager.addMapping("CharKneel", new KeyTrigger(KeyInput.KEY_C));
         inputManager.addMapping("CharKick", new KeyTrigger(KeyInput.KEY_M));
 
         inputManager.addListener(this, "CharLeft");

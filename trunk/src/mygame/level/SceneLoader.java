@@ -51,8 +51,6 @@ public class SceneLoader {
     public LevelFoundation foundation;
     private ArrayList<Geometry> pickups;
 
-
-
     public void init(LevelFoundation foundation, Node level, GameStageEnvironment env) {
         this.env = env;
         this.foundation = foundation;
@@ -73,7 +71,7 @@ public class SceneLoader {
         //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
         //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
 
-    //    reorient();
+        //    reorient();
         //Physics
 
         //env.getPhysicsSpace().setGravity(new Vector3f(0, 0, 1));
@@ -137,71 +135,54 @@ public class SceneLoader {
 
     private void loadZipScene() {
 
-        if("quake3level.zip".equals(foundation.scenefile))
-        {
-        env.getAssetManager().registerLocator("quake3level.zip", ZipLocator.class.getName());
+        if ("quake3level.zip".equals(foundation.scenefile)) {
+            env.getAssetManager().registerLocator("quake3level.zip", ZipLocator.class.getName());
 
-        // create the geometry and attach it
-        MaterialList matList = (MaterialList) env.getAssetManager().loadAsset("Scene.material");
-        OgreMeshKey key = new OgreMeshKey("main.meshxml", matList);
-        levelNode = (Node) env.getAssetManager().loadAsset(key);
-        levelNode.setLocalScale(0.1f);
+            // create the geometry and attach it
+            MaterialList matList = (MaterialList) env.getAssetManager().loadAsset("Scene.material");
+            OgreMeshKey key = new OgreMeshKey("main.meshxml", matList);
+            levelNode = (Node) env.getAssetManager().loadAsset(key);
+            levelNode.setLocalScale(0.1f);
 
-        CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) levelNode);
+            CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) levelNode);
 
-        levelPhyNode = new PhysicsNode((Spatial) levelNode, levelShape, 0);
-        env.getRootNode().attachChild(levelPhyNode);
-
-
-        env.getPhysicsSpace().add(levelPhyNode);
-        }
-
-        if("town.zip".equals(foundation.scenefile))
-        {
-           env.getAssetManager().registerLocator("http://jmonkeyengine.googlecode.com/files/town.zip", HttpZipLocator.class.getName());
-
-            //env.getAssetManager().registerLocator("town.zip", ZipLocator.class.getName());
-
-             Spatial sceneModel;
-             PhysicsNode landscape;
-
-            sceneModel =  env.getAssetManager().loadModel("main.scene");
-            sceneModel.setLocalScale(2f);
-
-    // We set up collision detection for the scene by creating a
-    // compound collision shape and a physics node.
-    CompoundCollisionShape sceneShape =
-      CollisionShapeFactory.createMeshCompoundShape((Node) sceneModel);
-    levelPhyNode = new PhysicsNode(sceneModel, sceneShape, 0);
-    env.getRootNode().attachChild(levelPhyNode);
+            levelPhyNode = new PhysicsNode((Spatial) levelNode, levelShape, 0);
+            env.getRootNode().attachChild(levelPhyNode);
 
 
-        env.getPhysicsSpace().add(levelPhyNode);
+            env.getPhysicsSpace().add(levelPhyNode);
+        } else if ("town.zip".equals(foundation.scenefile)) {
+            //  env.getAssetManager().registerLocator("http://jmonkeyengine.googlecode.com/files/town.zip", HttpZipLocator.class.getName());
 
-      /*  ObjectUtil util = new ObjectUtil(env);
+            env.getAssetManager().registerLocator("town.zip", ZipLocator.class.getName());
 
-        BrickWall b = new BrickWall(new Vector3f(94, 1, -18), new Vector3f(5, 2, 1));
-        levelPhyNode.attachChild(b.node);
-        b.init(env);
-*/
-    // We set up collision detection for the player by creating
-    // a capsule collision shape and a physics character node.
-    // The physics character node offers extra settings for
-    // size, stepheight, jumping, falling, and gravity.
-    // We also put the player in its starting position.
- /*   player = new PhysicsCharacterNode(new CapsuleCollisionShape(1.5f, 6f, 1), .05f);
-    player.setJumpSpeed(20);
-    player.setFallSpeed(30);
-    player.setGravity(30);
-    player.setLocalTranslation(new Vector3f(0, 10, 0));
+            Spatial sceneModel;
+      
+//
+//            sceneModel = env.getAssetManager().loadModel("town/main.scene");
+//            sceneModel.setLocalScale(2f);
 
-    // We attach the scene and the player to the rootnode and the physics space,
-    // to make them appear in the game world.
-    rootNode.attachChild(landscape);
-    rootNode.attachChild(player);
-    bulletAppState.getPhysicsSpace().add(landscape);
-    bulletAppState.getPhysicsSpace().add(player);
-*/
+                        // create the geometry and attach it
+            MaterialList matList = (MaterialList) env.getAssetManager().loadAsset("town/main.material");
+            OgreMeshKey key = new OgreMeshKey("town/level.meshxml", matList);
+            levelNode = (Node) env.getAssetManager().loadAsset(key);
+            levelNode.setLocalScale(2f);
+
+            CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) levelNode);
+
+            levelPhyNode = new PhysicsNode((Spatial) levelNode, levelShape, 0);
+      //      levelPhyNode.attachDebugShape(env.getAssetManager());
+            env.getRootNode().attachChild(levelPhyNode);
+
+
+            env.getPhysicsSpace().add(levelPhyNode);
+
+            BrickWall b = new BrickWall(new Vector3f(94, 1, -18), new Vector3f(5, 2, 1));
+            levelPhyNode.attachChild(b.node);
+            b.init(env);
+
+
+
         }
     }
 
@@ -245,8 +226,6 @@ public class SceneLoader {
         player.init();
     }
 
-
-
     public void update(float tpf) {
         player.update(tpf);
         updatePickUpCollisions(tpf);
@@ -255,36 +234,29 @@ public class SceneLoader {
         updateInterruptorCollisions(tpf);
     }
 
-    public void stop()
-    {
+    public void stop() {
         player.stop();
         env.getRootNode().detachChild(levelPhyNode);
         env.getRootNode().detachChild(levelNode);
     }
 
-    private void addPickupObjects()
-    {
-        for(PickableSpheres sphere : foundation.spheres.values())
-        {
+    private void addPickupObjects() {
+        for (PickableSpheres sphere : foundation.spheres.values()) {
             sphere.init(env);
             levelPhyNode.attachChild(sphere.geom);
         }
 
     }
 
-    private void addHazardAreas()
-    {
-        for(Hazard hazard : foundation.hazards.values())
-        {
+    private void addHazardAreas() {
+        for (Hazard hazard : foundation.hazards.values()) {
             hazard.init(env);
             levelPhyNode.attachChild(hazard.geom);
         }
     }
 
-    private void addInterruptors()
-    {
-        for(Interruptor interruptor : foundation.interruptors.values())
-        {
+    private void addInterruptors() {
+        for (Interruptor interruptor : foundation.interruptors.values()) {
             interruptor.init(env);
             interruptor.obstacle.init(env);
 
@@ -292,6 +264,7 @@ public class SceneLoader {
 
         }
     }
+
 
     private void addBricks()
     {
@@ -305,19 +278,18 @@ public class SceneLoader {
 
     private void addGoal()
     {
+
         foundation.goal.init(env);
         levelPhyNode.attachChild(foundation.goal.geom);
     }
 
-    private void updatePickUpCollisions(float tpf)
-    {
+    private void updatePickUpCollisions(float tpf) {
         env.getRootNode().updateGeometricState();
         CollisionResults results;
 
-        for(PickableSpheres sphere : foundation.spheres.values())
-        {
+        for (PickableSpheres sphere : foundation.spheres.values()) {
             if (sphere.isActivated()) {
-              continue;
+                continue;
             }
 
             results = new CollisionResults();
@@ -326,7 +298,7 @@ public class SceneLoader {
 
             if (results.size() > 0) {
                 sphere.activate();
-                ((LevelStage)env.getLevelStage()).levelController.objectCollected();
+                ((LevelStage) env.getLevelStage()).levelController.objectCollected();
                 SoundManager.playObjectPickUpSound();
                 PickupGameInstanceManager.getInstance().addPoints(100);
                 System.out.println(PickupGameInstanceManager.getInstance().getScore() + " Score");
@@ -335,8 +307,8 @@ public class SceneLoader {
         }
 
     }
-    private void updateHazardCollisions(float tpf)
-    {
+
+    private void updateHazardCollisions(float tpf) {
         env.getRootNode().updateGeometricState();
         CollisionResults results;
 
@@ -354,18 +326,17 @@ public class SceneLoader {
         }
     }
 
-     private void updateGoalCollisions(float tpf)
-    {
+    private void updateGoalCollisions(float tpf) {
         CollisionResults results = new CollisionResults();
-            BoundingVolume bv = foundation.goal.geom.getWorldBound();
-            player.player.collideWith(bv, results);
+        BoundingVolume bv = foundation.goal.geom.getWorldBound();
+        player.player.collideWith(bv, results);
 
-            if (results.size() > 0) {
-                ((LevelStage)env.getLevelStage()).victory();
-            }
-     }
-    private void updateInterruptorCollisions(float tpf)
-    {
+        if (results.size() > 0) {
+            ((LevelStage) env.getLevelStage()).victory();
+        }
+    }
+
+    private void updateInterruptorCollisions(float tpf) {
         env.getRootNode().updateGeometricState();
         CollisionResults results;
 
@@ -376,8 +347,8 @@ public class SceneLoader {
             player.player.collideWith(bv, results);
 
             if (results.size() > 0) {
-                
- 
+
+
                 interruptor.activate();
             }
         }
