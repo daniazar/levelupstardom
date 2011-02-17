@@ -6,16 +6,13 @@
 package mygame.stage.stages;
 
 
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import java.util.HashMap;
+import com.jme3.util.SkyFactory;
 import mygame.level.SceneLoader;
 import mygame.media.SoundManager;
-import mygame.model.Level;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 
-import com.google.gson.Gson;
 /**
  *
  * @author matiaspan
@@ -51,8 +48,12 @@ public class LevelStage extends GameStage {
         initializeCamera();
                 SoundManager.stopMenuBGM();
         SoundManager.playGameBGM();
+        createSky();
     }
 
+    private void createSky() {
+        env.getRootNode().attachChild(SkyFactory.createSky(env.getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", false));
+    }
 
     private void initializeCamera(){
         //env.getCamera().setLocation(sceneLoader.getSpawnPoint());
