@@ -55,7 +55,7 @@ public class Timer extends BitmapText{
       time-= 0.1f;
 
       setText("Time left: " + time.toString().substring(0, 5));
-      level.updateDistanceText();
+
   }
 
  }

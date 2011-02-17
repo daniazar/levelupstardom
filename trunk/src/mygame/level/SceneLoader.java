@@ -23,10 +23,14 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.ogre.OgreMeshKey;
 import java.util.ArrayList;
 import mygame.PlayerController;
+import mygame.media.SoundManager;
+import mygame.model.GameInstanceManager;
 import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStageEnvironment;
-import mygame.stage.stages.Hazard;
+import mygame.model.Hazard;
+import mygame.model.Interruptor;
 import mygame.stage.stages.LevelFoundation;
+import mygame.stage.stages.LevelStage;
 import mygame.stage.stages.PickableSpheres;
 
 /**
@@ -59,6 +63,8 @@ public class SceneLoader {
 
         addPickupObjects();
         addHazardAreas();
+        addInterruptors();
+        addGoal();
 
         //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
         //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
@@ -118,9 +124,9 @@ public class SceneLoader {
 
         for (Vector3f plPosition : foundation.pointLightPositions) {
             PointLight pl = new PointLight();
-            pl.setColor(ColorRGBA.Blue.clone().multLocal(2));
+            pl.setColor(ColorRGBA.randomColor().clone().multLocal(2));
             pl.setPosition(plPosition);
-            pl.setRadius(10);
+            pl.setRadius(40);
             env.getRootNode().addLight(pl);
         }
     }
@@ -195,6 +201,8 @@ public class SceneLoader {
         player.update(tpf);
         updatePickUpCollisions(tpf);
         updateHazardCollisions(tpf);
+        updateGoalCollisions(tpf);
+        updateInterruptorCollisions(tpf);
     }
 
 
@@ -217,6 +225,24 @@ public class SceneLoader {
         }
     }
 
+    private void addInterruptors()
+    {
+        for(Interruptor interruptor : foundation.interruptors.values())
+        {
+            interruptor.init(env);
+            interruptor.obstacle.init(env);
+
+            env.getRootNode().attachChild(interruptor.geom);
+
+        }
+    }
+
+    private void addGoal()
+    {
+        foundation.goal.init(env);
+        env.getRootNode().attachChild(foundation.goal.geom);
+    }
+
     private void updatePickUpCollisions(float tpf)
     {
         env.getRootNode().updateGeometricState();
@@ -234,6 +260,8 @@ public class SceneLoader {
 
             if (results.size() > 0) {
                 sphere.activate();
+                ((LevelStage)env.getLevelStage()).levelController.objectCollected();
+                SoundManager.playObjectPickUpSound();
                 PickupGameInstanceManager.getInstance().addPoints(100);
                 System.out.println(PickupGameInstanceManager.getInstance().getScore() + " Score");
             }
@@ -253,12 +281,39 @@ public class SceneLoader {
             player.player.collideWith(bv, results);
 
             if (results.size() > 0) {
+                SoundManager.playDamageSound();
                 PickupGameInstanceManager.getInstance().damageCharacter(tpf * hazard.dot);
                 System.out.println(PickupGameInstanceManager.getInstance().getEnergyLeft() + " HP");
             }
         }
     }
 
+     private void updateGoalCollisions(float tpf)
+    {
+        CollisionResults results = new CollisionResults();
+            BoundingVolume bv = foundation.goal.geom.getWorldBound();
+            player.player.collideWith(bv, results);
 
+            if (results.size() > 0) {
+                ((LevelStage)env.getLevelStage()).victory();
+            }
+     }
+    private void updateInterruptorCollisions(float tpf)
+    {
+        env.getRootNode().updateGeometricState();
+        CollisionResults results;
 
+        for (Interruptor interruptor : foundation.interruptors.values()) {
+
+            results = new CollisionResults();
+            BoundingVolume bv = interruptor.geom.getWorldBound();
+            player.player.collideWith(bv, results);
+
+            if (results.size() > 0) {
+                
+ 
+                interruptor.activate();
+            }
+        }
+    }
 }
