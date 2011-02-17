@@ -95,10 +95,15 @@ public class LevelStage extends GameStage {
 
     @Override
     public void stop() {
-        
+
+        env.getGuiNode().detachAllChildren();
         sceneLoader.stop();
         env.getRootNode().detachChild(level);
-        env.getGuiNode().detachAllChildren();
+        env.getPhysicsSpace().removeAll(level);
+      
+        SoundManager.stopStepsSound();
+        SoundManager.stopGameBGM();
+        SoundManager.stopMenuBGM();
 	getGameStageEnvironment().getInputManager().setCursorVisible(false);
 
     }
@@ -117,7 +122,9 @@ public class LevelStage extends GameStage {
     }
 
     public void gameOver() {
+              stop();
         SoundManager.playGameOverSound();
+  
         System.out.println("GAME OVER");
         jumpTo(GameOverStage.class.getName());
     }
@@ -128,10 +135,7 @@ public class LevelStage extends GameStage {
         lselect.changeLevel(currentlevel);
 
     }
-    private void updateHud(int life, float time, int collected, int all)
-    {
-        sysout.setText("ohla Danila");
-    }
+
         private void enableHud() {
 //For debugging
         env.getGuiNode().detachAllChildren();
