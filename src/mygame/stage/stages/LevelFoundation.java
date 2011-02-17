@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -26,6 +27,7 @@ public class LevelFoundation {
     public Vector3f spawnpoint;
     public Vector3f goal;
     public Vector3f goalextent;
+    public List<Vector3f> pointLightPositions;
     public HashMap<Integer, PickableSpheres> spheres;
     public ArrayList<Integer> spheresToRemove = new ArrayList<Integer>();
 
@@ -87,7 +89,7 @@ public class LevelFoundation {
         this.scenefile = levelsF.scenefile;
         this.scenetype = levelsF.scenetype;
         this.spawnpoint = levelsF.spawnpoint;
-       
+        this.pointLightPositions = levelsF.pointLightPositions;
 
         this.spheres = new HashMap<Integer, PickableSpheres>(levelsF.spheres);
 
