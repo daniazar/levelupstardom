@@ -4,6 +4,7 @@
  */
 package mygame.level;
 
+import com.jme3.asset.plugins.HttpZipLocator;
 import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
@@ -133,6 +134,8 @@ public class SceneLoader {
 
     private void loadZipScene() {
 
+        if("quake3level.zip".equals(foundation.scenefile))
+        {
         env.getAssetManager().registerLocator("quake3level.zip", ZipLocator.class.getName());
 
         // create the geometry and attach it
@@ -148,7 +151,49 @@ public class SceneLoader {
 
 
         env.getPhysicsSpace().add(levelPhyNode);
+        }
 
+        if("town.zip".equals(foundation.scenefile))
+        {
+           env.getAssetManager().registerLocator("http://jmonkeyengine.googlecode.com/files/town.zip", HttpZipLocator.class.getName());
+
+            //env.getAssetManager().registerLocator("town.zip", ZipLocator.class.getName());
+
+             Spatial sceneModel;
+             PhysicsNode landscape;
+
+            sceneModel =  env.getAssetManager().loadModel("main.scene");
+            sceneModel.setLocalScale(2f);
+
+    // We set up collision detection for the scene by creating a
+    // compound collision shape and a physics node.
+    CompoundCollisionShape sceneShape =
+      CollisionShapeFactory.createMeshCompoundShape((Node) sceneModel);
+    levelPhyNode = new PhysicsNode(sceneModel, sceneShape, 0);
+    env.getRootNode().attachChild(levelPhyNode);
+
+
+        env.getPhysicsSpace().add(levelPhyNode);
+
+    // We set up collision detection for the player by creating
+    // a capsule collision shape and a physics character node.
+    // The physics character node offers extra settings for
+    // size, stepheight, jumping, falling, and gravity.
+    // We also put the player in its starting position.
+ /*   player = new PhysicsCharacterNode(new CapsuleCollisionShape(1.5f, 6f, 1), .05f);
+    player.setJumpSpeed(20);
+    player.setFallSpeed(30);
+    player.setGravity(30);
+    player.setLocalTranslation(new Vector3f(0, 10, 0));
+
+    // We attach the scene and the player to the rootnode and the physics space,
+    // to make them appear in the game world.
+    rootNode.attachChild(landscape);
+    rootNode.attachChild(player);
+    bulletAppState.getPhysicsSpace().add(landscape);
+    bulletAppState.getPhysicsSpace().add(player);
+*/
+        }
     }
 
     private void loadObjScene() {
