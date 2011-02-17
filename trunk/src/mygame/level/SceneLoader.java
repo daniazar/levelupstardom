@@ -4,14 +4,9 @@
  */
 package mygame.level;
 
-import com.bulletphysics.dynamics.RigidBody;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.jme3.asset.plugins.ZipLocator;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingVolume;
-import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
-import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.nodes.PhysicsNode;
 import com.jme3.bullet.util.CollisionShapeFactory;
@@ -20,14 +15,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.math.Vector3f;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialList;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.ogre.OgreMeshKey;
-import com.jme3.scene.shape.Box;
 import java.util.ArrayList;
 import mygame.PlayerController;
 import mygame.stage.GameStageEnvironment;
@@ -120,6 +113,14 @@ public class SceneLoader {
         dl.setColor(ColorRGBA.White.clone().multLocal(2));
         dl.setDirection(new Vector3f(-1, -1, -1).normalize());
         env.getRootNode().addLight(dl);
+
+        for (Vector3f plPosition : foundation.pointLightPositions) {
+            PointLight pl = new PointLight();
+            pl.setColor(ColorRGBA.White.clone().multLocal(2));
+            pl.setPosition(plPosition);
+            pl.setRadius(10);
+            env.getRootNode().addLight(pl);
+        }
     }
 
     private void loadZipScene() {
