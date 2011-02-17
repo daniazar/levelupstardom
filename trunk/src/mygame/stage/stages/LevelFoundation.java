@@ -30,6 +30,8 @@ public class LevelFoundation {
     public List<Vector3f> pointLightPositions;
     public HashMap<Integer, PickableSpheres> spheres;
     public ArrayList<Integer> spheresToRemove = new ArrayList<Integer>();
+    public HashMap<Integer, Hazard> hazards;
+   
 
     public LevelFoundation(){
     }
@@ -41,7 +43,8 @@ public class LevelFoundation {
 
     public LevelFoundation(String scenefile, String scenetype, String playermesh,
             float capsuleradius, float playerspeed, Vector3f spawnpoint, Vector3f goal,
-            Vector3f goalextent, HashMap<Integer, PickableSpheres> spheres)
+            Vector3f goalextent, HashMap<Integer, PickableSpheres> spheres,
+            HashMap<Integer, Hazard> hazards)
     {
         this.scenefile = scenefile;
         this.scenetype = scenetype;
@@ -53,6 +56,7 @@ public class LevelFoundation {
         this.goal = new Vector3f(goal);
         this.goalextent = new Vector3f(goalextent);
         this.spheres = new HashMap<Integer, PickableSpheres>(spheres);
+        this.hazards = new HashMap<Integer, Hazard>(hazards);
     }
 
     public static LevelFoundation loadFromFile(String filename)
@@ -90,7 +94,7 @@ public class LevelFoundation {
         this.scenetype = levelsF.scenetype;
         this.spawnpoint = levelsF.spawnpoint;
         this.pointLightPositions = levelsF.pointLightPositions;
-
+        this.hazards = new HashMap<Integer, Hazard>(levelsF.hazards);
         this.spheres = new HashMap<Integer, PickableSpheres>(levelsF.spheres);
 
     }

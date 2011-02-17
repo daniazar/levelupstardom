@@ -88,9 +88,9 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
         playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(scLoader.foundation.capsuleradius), .1f);
         playerPhysics.attachDebugShape(env.getAssetManager());
-        playerPhysics.setJumpSpeed(20);
-        playerPhysics.setFallSpeed(30);
-        playerPhysics.setGravity(30);
+        playerPhysics.setJumpSpeed(70);
+        playerPhysics.setFallSpeed(90);
+        playerPhysics.setGravity(100);
 
         playerPhysics.setLocalTranslation(scLoader.foundation.spawnpoint);
 
@@ -216,8 +216,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
     public void update(float tpf)
     {
-            if(play)
-            return;
+
         LevelFoundation lf = scLoader.foundation;
         Vector3f camDir = env.getCamera().getDirection().clone().multLocal(lf.playerspeed);
         Vector3f camLeft = env.getCamera().getLeft().clone().multLocal(lf.playerspeed);
@@ -266,7 +265,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
         Quaternion q = player.getWorldRotation();
 
-     //   player.rotate(modelRotation.mult(q));
+     //  player.rotate(modelRotation.mult(q));
         modelRotation.multLocal(modelDirection);
         modelRight.set(modelDirection);
         ROTATE_LEFT.multLocal(modelRight);
@@ -298,7 +297,9 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
             } else {
                 down = false;
             }
-        } else if (binding.equals("CharSpace")) {
+        } else if (binding.equals("CharSpace")&& !play) {
+            play = true;
+            channel.setAnim("Jump");
             playerPhysics.jump();
         } else if (binding.equals("CharKick") && !play) {
             play = true;
