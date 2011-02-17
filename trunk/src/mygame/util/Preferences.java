@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import mygame.media.SoundManager;
 
 /**
  *
@@ -22,12 +23,14 @@ public class Preferences {
 
     private static Preferences instance;
 
-    private boolean soundFXEnabled;
-    private boolean musicEnabled;
+    private int soundFXLevel;
+    private int musicLevel;
 
-    private Preferences(boolean musicEnabled, boolean soundFXEnabled) {
-        this.musicEnabled = musicEnabled;
-        this.soundFXEnabled = soundFXEnabled;
+    private final static float MAXLEVEL = 100;
+
+    private Preferences(int soundFXLevel, int musicLevel) {
+        this.musicLevel = musicLevel;
+        this.soundFXLevel = soundFXLevel;
     }
     
     private Preferences() {
@@ -44,7 +47,7 @@ public class Preferences {
 
                 Writer output = new BufferedWriter(new FileWriter(f));
                 try {
-                  output.write( new Gson().toJson(new Preferences(false, false)) );
+                  output.write( new Gson().toJson(new Preferences(100, 100)) );
                 } finally {
                   output.close();
                 }
@@ -67,8 +70,8 @@ public class Preferences {
             }
 
             Preferences savedPreferences = new Gson().fromJson(content.toString(), Preferences.class);
-            preferences.musicEnabled = savedPreferences.musicEnabled;
-            preferences.soundFXEnabled = savedPreferences.soundFXEnabled;
+            preferences.soundFXLevel = savedPreferences.soundFXLevel;
+            preferences.musicLevel = savedPreferences.musicLevel;
             reader.close();
         } catch (IOException e) {
             // Preferences can't be read
@@ -108,31 +111,57 @@ public class Preferences {
         }
     }
 
-    public void setSoundFXEnabled(boolean enabled) {
-        soundFXEnabled = enabled;
-        syncWithFile();
-    }
-
     public boolean isSoundFXEnabled() {
-        return soundFXEnabled;
-    }
-
-    public void setMusicEnabled(boolean  enabled) {
-        musicEnabled = enabled;
-        syncWithFile();
+        return soundFXLevel != 0;
     }
 
     public boolean isMusicEnabled() {
-        return musicEnabled;
+        return musicLevel != 0;
     }
 
-    public void toggleMusic() {
-        musicEnabled = !musicEnabled;
-        syncWithFile();
+    public void upSoundFX() {
+        if (soundFXLevel < MAXLEVEL) {
+            soundFXLevel += 10;
+        }
     }
 
-    public void toggleSoundFX() {
-        soundFXEnabled = !soundFXEnabled;
+    public void upMusic() {
+        if (musicLevel < MAXLEVEL) {
+            musicLevel += 10;
+        }
+    }
+
+    public void lowerSoundFX() {
+        if (soundFXLevel > 0) {
+            soundFXLevel -= 10;
+        }
+    }
+
+    public void lowerMusic() {
+        if (musicLevel > 0) {
+            musicLevel -= 10;
+        }
+    }
+
+    public float getMusicLevel() {
+        return ((float)musicLevel) / 100;
+    }
+
+    public float getSoundFXLevel() {
+        return ((float)soundFXLevel) / 100;
+    }
+
+    public String getMusicLevelString() {
+        return musicLevel + "%";
+    }
+
+    public String getSoundFXLevelString() {
+        return soundFXLevel + "%";
+    }
+    
+    public void saveInstance() {
         syncWithFile();
+        SoundManager.setSoundFXLevel(soundFXLevel);
+        SoundManager.setMusicLevel(musicLevel);
     }
 }
