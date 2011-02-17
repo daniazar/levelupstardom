@@ -38,9 +38,7 @@ public class LevelSelect extends GameStage {
         public void onUIAction(UIAction action) {
             System.out.println("Selected level " + levelFilename);
             LevelStage levelStage = (LevelStage) env.getLevelStage();
-            if(levelFilename.equals("nivel2.lvl"))
-                jumpTo("LevelExample");
-            levelStage.loadLevel(levelFilename);
+            levelStage.loadLevel(levelFilename, index);
             System.out.println(levelFilename);
             jumpTo("LevelStage");
 
@@ -84,5 +82,20 @@ public class LevelSelect extends GameStage {
     public void stop() {
 	FRAME.setVisible(false);
 	getGameStageEnvironment().getInputManager().setCursorVisible(false);
+    }
+
+    public void changeLevel(int index)
+    {
+        index++;
+        if(index >= levels.size())
+            System.out.println("Game FINISHED");
+        else
+        {
+            env.getLevelStage().stop();
+            ((LevelStage) env.getLevelStage()).loadLevel("level2.json", 1);
+            jumpTo("LevelStage");
+
+        }
+
     }
 }

@@ -53,7 +53,7 @@ public class ObjectUtil {
   Material floor_mat;
   Material door_mat;
 
-
+   public PhysicsNode doorNode;
     public ObjectUtil(GameStageEnvironment env) {
         this.env = env;
         initMaterials();
@@ -120,16 +120,18 @@ public class ObjectUtil {
     {
           Geometry box_geo = new Geometry("door", door);
     box_geo.setMaterial(door_mat);
-    PhysicsNode brickNode = new PhysicsNode(
+    doorNode = new PhysicsNode(
      box_geo,      // geometry
      doorCollisionShape, // collision shape
      1.5f);       // mass
     /** position the brick and activate shadows */
-    brickNode.setLocalTranslation(ori);
-    brickNode.setShadowMode(ShadowMode.CastAndReceive);
-    rootNode.attachChild(brickNode);
-    env.getPhysicsSpace().add(brickNode);
+    doorNode.setLocalTranslation(ori);
+    doorNode.setShadowMode(ShadowMode.CastAndReceive);
+    rootNode.attachChild(doorNode);
+    env.getPhysicsSpace().add(doorNode);
   }
+
+
   /** This method creates one individual physical cannon ball.
    * By defaul, the ball is accelerated and flies
    * from the camera position in the camera direction.*/

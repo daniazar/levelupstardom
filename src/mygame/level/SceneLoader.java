@@ -50,11 +50,12 @@ public class SceneLoader {
     public PlayerController player;
     public LevelFoundation foundation;
     private ArrayList<Geometry> pickups;
+    private boolean leveldone;
 
     public void init(LevelFoundation foundation, Node level, GameStageEnvironment env) {
         this.env = env;
         this.foundation = foundation;
-
+        leveldone = false;
         levelNode = level;
         env.getRootNode().attachChild(levelNode);
         if (foundation.scenetype.equals("zip")) {
@@ -128,7 +129,7 @@ public class SceneLoader {
             levelNode.addLight(pl);
         }
 
-                addPickupObjects();
+        addPickupObjects();
         addHazardAreas();
         addInterruptors();
         addGoal();
@@ -158,7 +159,7 @@ public class SceneLoader {
 
             env.getAssetManager().registerLocator("town.zip", ZipLocator.class.getName());
 
-                        // create the geometry and attach it
+            // create the geometry and attach it
             MaterialList matList = (MaterialList) env.getAssetManager().loadAsset("town/main.material");
             OgreMeshKey key = new OgreMeshKey("town/level.meshxml", matList);
             levelNode = (Node) env.getAssetManager().loadAsset(key);
@@ -167,13 +168,13 @@ public class SceneLoader {
             CompoundCollisionShape levelShape = CollisionShapeFactory.createMeshCompoundShape((Node) levelNode);
 
             levelPhyNode = new PhysicsNode((Spatial) levelNode, levelShape, 0);
-      //      levelPhyNode.attachDebugShape(env.getAssetManager());
+            //      levelPhyNode.attachDebugShape(env.getAssetManager());
             env.getRootNode().attachChild(levelPhyNode);
 
 
             env.getPhysicsSpace().add(levelPhyNode);
 
-            
+
 
 
         }
@@ -220,10 +221,15 @@ public class SceneLoader {
     }
 
     public void update(float tpf) {
+        env.getRootNode().updateGeometricState();
+        updateGoalCollisions(tpf);
+        if (leveldone) {
+            return;
+        }
         player.update(tpf);
         updatePickUpCollisions(tpf);
         updateHazardCollisions(tpf);
-        updateGoalCollisions(tpf);
+
         updateInterruptorCollisions(tpf);
     }
 
@@ -252,42 +258,35 @@ public class SceneLoader {
         for (Interruptor interruptor : foundation.interruptors.values()) {
             interruptor.init(env);
             interruptor.obstacle.init(env);
-               levelPhyNode.attachChild(interruptor.geom);
+            levelPhyNode.attachChild(interruptor.geom);
             levelPhyNode.attachChild(interruptor.obstacle.root);
-         
-//              levelPhyNode.attachChild(interruptor.obstacle.root);
-//            PhysicsNode phy = interruptor.obstacle.physicsNode;
-//            env.getPhysicsSpace().add(phy);
-           
+
 
         }
 
 
     }
 
-
-    private void addBricks()
-    {
-        for(BrickWall brickWall : foundation.brickWalls.values())
-        {
+    private void addBricks() {
+        for (BrickWall brickWall : foundation.brickWalls.values()) {
             levelPhyNode.attachChild(brickWall.node);
             brickWall.init(env);
 
         }
     }
 
-    private void addGoal()
-    {
+    private void addGoal() {
 
         foundation.goal.init(env);
         levelPhyNode.attachChild(foundation.goal.geom);
     }
 
     private void updatePickUpCollisions(float tpf) {
-        env.getRootNode().updateGeometricState();
+
         CollisionResults results;
 
         for (PickableSpheres sphere : foundation.spheres.values()) {
+            env.getRootNode().updateGeometricState();
             if (sphere.isActivated()) {
                 continue;
             }
@@ -309,11 +308,11 @@ public class SceneLoader {
     }
 
     private void updateHazardCollisions(float tpf) {
-        env.getRootNode().updateGeometricState();
+
         CollisionResults results;
 
         for (Hazard hazard : foundation.hazards.values()) {
-
+            env.getRootNode().updateGeometricState();
             results = new CollisionResults();
             BoundingVolume bv = hazard.geom.getWorldBound();
             player.player.collideWith(bv, results);
@@ -327,30 +326,32 @@ public class SceneLoader {
     }
 
     private void updateGoalCollisions(float tpf) {
+        env.getRootNode().updateGeometricState();
         CollisionResults results = new CollisionResults();
         BoundingVolume bv = foundation.goal.geom.getWorldBound();
         player.player.collideWith(bv, results);
 
         if (results.size() > 0) {
             ((LevelStage) env.getLevelStage()).victory();
+            leveldone = true;
         }
     }
 
     private void updateInterruptorCollisions(float tpf) {
-       // env.getRootNode().updateGeometricState();
 
-        
+
         CollisionResults results;
 
         for (Interruptor interruptor : foundation.interruptors.values()) {
-
+            env.getRootNode().updateGeometricState();
             results = new CollisionResults();
             BoundingVolume bv = interruptor.geom.getWorldBound();
             player.player.collideWith(bv, results);
 
             if (results.size() > 0) {
                 interruptor.activate();
-               levelPhyNode.detachChild(interruptor.obstacle.root);
+                levelPhyNode.detachChild(interruptor.obstacle.root);
+                env.getPhysicsSpace().remove(interruptor.obstacle.util.doorNode);
             }
         }
     }

@@ -57,4 +57,6 @@ public interface GameStageEnvironment {
 
     void setLevelStage(LevelStage stage);
 
+    void reset();
+
 }

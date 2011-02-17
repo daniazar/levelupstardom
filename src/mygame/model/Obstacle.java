@@ -4,7 +4,6 @@
  */
 package mygame.model;
 
-
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
@@ -34,8 +33,10 @@ public class Obstacle {
     public Vector3f extent;
     public Geometry geom;
     public Node root;
-       public PhysicsNode physicsNode;
-       public GameStageEnvironment env;
+    public PhysicsNode physicsNode;
+    public GameStageEnvironment env;
+    public ObjectUtil util;
+
     public Obstacle() {
     }
 
@@ -46,60 +47,17 @@ public class Obstacle {
 
     public void init(GameStageEnvironment env) {
 
-//         this.env = env;
-      root = new Node();
-//            root.setLocalTranslation(pos);
-//                 Mesh mesh = new Box(Vector3f.ZERO, extent);
-//        geom = new Geometry("Box", mesh);
-//                AssetManager assman = env.getAssetManager();
-//        Material mat = new Material( assman, "Common/MatDefs/Misc/SimpleTextured.j3md");
-//        mat.setTexture("m_ColorMap", assman.loadTexture("Textures/door.jpg"));
-//
-//        geom.setMaterial(mat);
-//                MeshCollisionShape shape = new MeshCollisionShape(mesh);
-//        physicsNode = new PhysicsNode(geom,shape,20);
-//
-//
-//        physicsNode.attachDebugShape(assman);
-//        physicsNode.setShadowMode(ShadowMode.Receive);
-//
-//        root.attachChild(physicsNode);
-          root.setLocalTransform(new Transform(pos));
-        ObjectUtil util = new ObjectUtil(env);
+        root = new Node();
 
-        util.initDoor(root,extent);
-        
+        root.setLocalTransform(new Transform(pos));
+        util = new ObjectUtil(env);
 
-//        //physicsNode.setCollideWithGroups(physicsNode.COLLISION_GROUP_01);
-//       physicsNode.attachDebugShape(assman);
-//
-//        physicsNode.setLocalTranslation(pos.x, pos.y, pos.z);
-//        env.getRootNode().attachChild(physicsNode);
-//      //  env.getRootNode().attachChild(geom);
-//
+        util.initDoor(root, extent);
 
-        //env.getPhysicsSpace().add(physicsNode);
-
-//            Geometry box_geo = new Geometry("brick", brick);
-//    box_geo.setMaterial(wall_mat);
-//    PhysicsNode brickNode = new PhysicsNode(
-//     box_geo,      // geometry
-//     boxCollisionShape, // collision shape
-//     1.5f);       // mass
-//    /** position the brick and activate shadows */
-//    brickNode.setLocalTranslation(ori);
-//    brickNode.setShadowMode(ShadowMode.CastAndReceive);
-//    rootNode.attachChild(brickNode);
-//    env.getPhysicsSpace().add(brickNode);
-        
-
-
-//
 
     }
 
-    public void removeMyself()
-    {
-     //   env.getRootNode().detachChild(physicsNode);
+    public void removeMyself() {
+        //   env.getRootNode().detachChild(physicsNode);
     }
 }

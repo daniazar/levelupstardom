@@ -32,17 +32,19 @@ public class LevelStage extends GameStage {
     private LevelsConfig levels;
     private GameInstanceManager gameInstanceManager;
 
-
+   private int currentlevel;
 
   //  private Timer timer;
     private BitmapText sysout;//dubug to player screen
     public LevelController levelController;
-
-    public LevelStage(GameStageEnvironment env) {
+    public LevelSelect lselect;
+    public LevelStage(GameStageEnvironment env, LevelSelect lselect) {
         super(env, "LevelStage");
         this.env = env;
         levels = new LevelsConfig("levels.json");
         gameInstanceManager = PickupGameInstanceManager.getNewInstance();
+        this.lselect = lselect;
+
         enableHud();
 
 
@@ -51,7 +53,7 @@ public class LevelStage extends GameStage {
     }
 
     //Call this to load a level before jump to
-    public void loadLevel(String filename)
+    public void loadLevel(String filename, int index)
   {
       sceneLoader = new SceneLoader();
       LevelFoundation foundation = new LevelFoundation(filename);
@@ -59,7 +61,7 @@ public class LevelStage extends GameStage {
 
       this.level = new Node();
       //timer = new Timer(env, foundation.time);
-
+      currentlevel = index;
       env.getRootNode().attachChild(this.level);
       sceneLoader.init(foundation,this.level, env);
          levelController = new LevelController(env, foundation.spheres.size());
@@ -123,6 +125,8 @@ public class LevelStage extends GameStage {
     public void victory() {
         SoundManager.playVictorySound();
         System.out.println("Victory");
+        lselect.changeLevel(currentlevel);
+
     }
     private void updateHud(int life, float time, int collected, int all)
     {
