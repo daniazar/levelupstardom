@@ -27,6 +27,7 @@ public class SoundManager {
     private static AudioNode menuBGMSound = null;
     private static AudioNode gameBGMSound = null;
     private static AudioNode damagesound = null;
+    private static AudioNode jumpSound = null;
 
     private static Float soundFXLevel = null;
     private static Float musicLevel = null;
@@ -102,6 +103,23 @@ public class SoundManager {
 
     public static void playJumpSound() {
         initLevels();
+        try {
+             if (jumpSound == null) {
+                jumpSound = new AudioNode(assetManager, "sounds/wav/jump.wav");
+                jumpSound.setLooping(false);
+                jumpSound.setVolume(soundFXLevel / 10);
+            }
+
+            if(Preferences.getInstance().isSoundFXEnabled()) {
+                if (jumpSound.getStatus() == Status.Playing) {
+                    audioRenderer.stopSource(jumpSound);
+                }
+                audioRenderer.playSource(jumpSound);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Sound file not found, or something");
+        }
     }
 
     public static void playObjectPickUpSound() {
@@ -219,6 +237,7 @@ public class SoundManager {
         damagesound = null;
         fallSound = null;
         objectPickUpSound = null;
+        jumpSound = null;
     }
 
     public static void setMusicLevel(int level) {

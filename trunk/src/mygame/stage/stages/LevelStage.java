@@ -9,6 +9,7 @@ package mygame.stage.stages;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 
 import mygame.level.SceneLoader;
@@ -18,7 +19,6 @@ import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.gui.LevelController;
-import mygame.stage.gui.Timer;
 
 /**
  *
@@ -31,6 +31,9 @@ public class LevelStage extends GameStage {
     private SceneLoader sceneLoader;
     private LevelsConfig levels;
     private GameInstanceManager gameInstanceManager;
+
+
+
   //  private Timer timer;
     private BitmapText sysout;//dubug to player screen
     public LevelController levelController;
@@ -41,6 +44,8 @@ public class LevelStage extends GameStage {
         levels = new LevelsConfig("levels.json");
         gameInstanceManager = PickupGameInstanceManager.getNewInstance();
         enableHud();
+
+
 
       
     }
@@ -64,7 +69,7 @@ public class LevelStage extends GameStage {
     @Override
     public void start() {
         initializeCamera();
-                SoundManager.stopMenuBGM();
+        SoundManager.stopMenuBGM();
         SoundManager.playGameBGM();
         createSky();
     }
@@ -87,7 +92,11 @@ public class LevelStage extends GameStage {
 
     @Override
     public void stop() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        
+        env.getRootNode().detachAllChildren();
+        
+	getGameStageEnvironment().getInputManager().setCursorVisible(false);
+
     }
 
     @Override
@@ -105,6 +114,8 @@ public class LevelStage extends GameStage {
 
     public void gameOver() {
         SoundManager.playGameOverSound();
+        System.out.println("GAME OVER");
+        jumpTo(GameOverStage.class.getName());
     }
 
     public void victory() {

@@ -30,6 +30,7 @@ import mygame.stage.stages.ObjectHighscores;
 import mygame.stage.stages.Settings;
 import mygame.util.HighScores.ScoreType;
 import mygame.stage.GameStage;
+import mygame.stage.stages.GameOverStage;
 
 /**
  * test
@@ -109,6 +110,8 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         highScoreMenu.addChild(new TimeHighscores(this));
         highScoreMenu.addChild(new ObjectHighscores(this));
 
+        GameOverStage gameOverStage = new GameOverStage(this);
+
         SoundManager.initSoundManager(this.getAssetManager(), this.getAudioRenderer());
 
         MainMenu mainMenu = new MainMenu(this);
@@ -117,9 +120,12 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         mainMenu.addChild(highScoreMenu);
 //	mainMenu.addChild(new GameStart(this));
 	mainMenu.addChild(levelStage);
+        mainMenu.addChild(gameOverStage);
 //	mainMenu.addChild(new PlayerHud(this));
         mainMenu.addChild(new LevelExample(this));
 	mainMenu.jumpTo(MainMenu.class.getName());
+
+        gameOverStage.mainMenu = mainMenu;
     }
 
     @Override
