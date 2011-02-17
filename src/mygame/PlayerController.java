@@ -8,10 +8,12 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.TextureKey;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.nodes.PhysicsCharacterNode;
+import com.jme3.bullet.nodes.PhysicsNode;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
@@ -24,7 +26,12 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.shape.Sphere.TextureMode;
+import com.jme3.texture.Texture;
 import mygame.level.SceneLoader;
 import mygame.media.SoundManager;
 import mygame.stage.GameStageEnvironment;
@@ -36,6 +43,14 @@ import mygame.stage.stages.LevelFoundation;
  */
 public class PlayerController implements AnimEventListener, ActionListener, PhysicsCollisionListener{
 
+
+
+          //bullet
+    Sphere bullet;
+    SphereCollisionShape bulletCollisionShape;
+  
+  Material stone_mat;
+  
     public Node  player, COGplaceholder, baseplaceholder;
     public Node placeholder;
     private GameStageEnvironment env;
@@ -135,6 +150,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         
 
         setupChaseCamera();
+        prepareBullet();
 //        initKeys();
 //        control = player.getControl(AnimControl.class);
 //        control.addListener(this);
@@ -163,7 +179,30 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         inputManager.addListener(this, "CharKick");
     }
 
+     private void prepareBullet() {
+        stone_mat = new Material(env.getAssetManager(), "Common/MatDefs/Misc/SimpleTextured.j3md");
+        TextureKey key2 = new TextureKey("Textures/Terrain/Rock/Rock.PNG");
+        key2.setGenerateMips(true);
+        Texture tex2 = env.getAssetManager().loadTexture(key2);
+        stone_mat.setTexture("m_ColorMap", tex2);
+        bullet = new Sphere(32, 32, 0.4f, true, false);
+        bullet.setTextureMode(TextureMode.Projected);
+        bulletCollisionShape = new SphereCollisionShape(0.4f);
+        env.getPhysicsSpace().addCollisionListener(this);
+    }
 
+      private void shootBullet() {
+        Geometry bulletg = new Geometry("bullet", bullet);
+        bulletg.setMaterial(stone_mat);
+        PhysicsNode bulletNode = new PhysicsNode(bulletg, bulletCollisionShape, 1);
+        bulletNode.setCcdMotionThreshold(0.1f);
+        bulletNode.setName("bullet");
+        bulletNode.setLocalTranslation(playerPhysics.getLocalTranslation().add(modelDirection.mult(1.8f).addLocal(modelRight.mult(0.9f))));
+        bulletNode.setShadowMode(ShadowMode.CastAndReceive);
+        bulletNode.setLinearVelocity(modelDirection.mult(40));
+        env.getRootNode().attachChild(bulletNode);
+        env.getPhysicsSpace().add(bulletNode);
+    }
 
 //    private ActionListener actionListener = new ActionListener() {
 //
@@ -324,6 +363,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         } else if (binding.equals("CharKick") && !play) {
             play = true;
             channel.setAnim("Kick");
+            shootBullet();
         }
         else if (binding.equals("CharKneel") && !play) {
             play = true;
@@ -349,7 +389,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
 
     public void collision(PhysicsCollisionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet.");
+//        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private void setupChaseCamera() {
