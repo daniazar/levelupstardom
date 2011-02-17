@@ -5,6 +5,8 @@
 
 package mygame.model;
 
+import java.util.Timer;
+
 /**
  *
  * @author matiaspan
@@ -38,5 +40,7 @@ public class PickupGameInstanceManager implements GameInstanceManager {
     public void addPoints(float points) {
         score += points;
     }
+
+    
 
 }

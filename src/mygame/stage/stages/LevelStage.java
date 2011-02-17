@@ -6,14 +6,18 @@
 package mygame.stage.stages;
 
 
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.scene.Node;
 import com.jme3.util.SkyFactory;
+
 import mygame.level.SceneLoader;
 import mygame.media.SoundManager;
 import mygame.model.GameInstanceManager;
 import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
+import mygame.stage.gui.Timer;
 
 /**
  *
@@ -26,12 +30,15 @@ public class LevelStage extends GameStage {
     private SceneLoader sceneLoader;
     private LevelsConfig levels;
     private GameInstanceManager gameInstanceManager;
+  //  private Timer timer;
+    private BitmapText sysout;//dubug to player screen
 
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
         this.env = env;
         levels = new LevelsConfig("levels.json");
         gameInstanceManager = new PickupGameInstanceManager();
+
     }
 
     //Call this to load a level before jump to
@@ -42,7 +49,8 @@ public class LevelStage extends GameStage {
       System.out.println(foundation.scenefile);
 
       this.level = new Node();
-      
+      //timer = new Timer(env, foundation.time);
+
       env.getRootNode().attachChild(this.level);
       sceneLoader.init(foundation,this.level, env);
  
@@ -86,5 +94,19 @@ public class LevelStage extends GameStage {
     }
 
 
+    private void updateHud(int life, float time, int collected, int all)
+    {
+        
+    }
+        private void enableHud() {
+//For debugging
+        env.getGuiNode().detachAllChildren();
+        BitmapFont guiFont = env.getGuiFont();
+        guiFont = env.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+        sysout = new BitmapText(guiFont, false);
+        sysout.setSize(guiFont.getCharSet().getRenderedSize());
+        sysout.setLocalTranslation(100, 0, 0);
+        env.getGuiNode().attachChild(sysout);
+    }
 
 }

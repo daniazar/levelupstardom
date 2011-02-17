@@ -18,4 +18,6 @@ public interface GameInstanceManager {
     void damageCharacter(float damage);
     void addPoints(float points);
 
+
+
 }

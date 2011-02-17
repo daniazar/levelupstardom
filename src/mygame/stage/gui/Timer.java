@@ -16,11 +16,11 @@ import mygame.stage.GameStageEnvironment;
 public class Timer extends BitmapText{
 
 
-    Float seconds = 200.0f;
+ 
     Float time;
     java.util.Timer timer = new java.util.Timer (  ) ;;
     LevelController level;
-    public Timer(GameStageEnvironment env, LevelController level) {
+    public Timer(GameStageEnvironment env,  float seconds) {
         super( env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
         time = seconds;
 

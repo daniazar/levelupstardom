@@ -39,7 +39,7 @@ public class LevelController extends Node{
         updateObjectsText();
         objects.setLocalTranslation( 40, env.getScreenSize().height - 40, 0);
         distance.setLocalTranslation( 40, env.getScreenSize().height , 0);
-        timer = new Timer(env, this);
+       // timer = new Timer(env, this);
         attachChild(objects);
         attachChild(timer);
         attachChild(distance);
