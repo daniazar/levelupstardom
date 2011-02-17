@@ -260,7 +260,12 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
             }
         } else {
-            SoundManager.playStepsSound();
+            if (playerPhysics.onGround()) {
+                SoundManager.playStepsSound();
+            } else {
+                SoundManager.stopStepsSound();
+            }
+            
             modelRotation.lookAt(walkDirection, Vector3f.UNIT_Y);
             if (airTime > .3f) {
                 if (!"Start".equals(channel.getAnimationName()) && !play) {
@@ -307,11 +312,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
                 down = true;
             } else {
                 down = false;
-            }
-        } else if (binding.equals("CharSpace")&& !play) {
-            play = true;
-            channel.setAnim("Jump");
-            playerPhysics.jump();
+             }
         } else if (binding.equals("CharKick") && !play) {
             play = true;
             channel.setAnim("Kick");
@@ -319,6 +320,14 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         else if (binding.equals("CharKneel") && !play) {
             play = true;
             channel.setAnim("Kneel");
+        }
+
+        if (binding.equals("CharSpace")&& !play) {
+            play = true;
+            channel.setAnim("Jump");
+            playerPhysics.jump();
+            SoundManager.stopStepsSound();
+            SoundManager.playJumpSound();
         }
     }
 
