@@ -219,6 +219,20 @@
             "dot": 20 
         } 
     },
+    "brickWalls": {
+        "1": {
+            "pos": {
+                "x": 94,
+                "y":  1, 
+                "z": -18
+            },
+            "brickDimension": {
+                "x": 5,
+                "y": 2,
+                "z": 1 
+            }
+        } 
+    },    
     "interruptors": {
         "1": {
             "pos": {

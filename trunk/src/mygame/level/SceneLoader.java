@@ -69,7 +69,7 @@ public class SceneLoader {
         addHazardAreas();
         addInterruptors();
         addGoal();
-
+        addBricks();
         //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
         //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
 
@@ -178,12 +178,12 @@ public class SceneLoader {
 
         env.getPhysicsSpace().add(levelPhyNode);
 
-        ObjectUtil util = new ObjectUtil(env);
+      /*  ObjectUtil util = new ObjectUtil(env);
 
         BrickWall b = new BrickWall(new Vector3f(94, 1, -18), new Vector3f(5, 2, 1));
         levelPhyNode.attachChild(b.node);
         b.init(env);
-
+*/
     // We set up collision detection for the player by creating
     // a capsule collision shape and a physics character node.
     // The physics character node offers extra settings for
@@ -289,6 +289,16 @@ public class SceneLoader {
             interruptor.obstacle.init(env);
 
             levelPhyNode.attachChild(interruptor.geom);
+
+        }
+    }
+
+    private void addBricks()
+    {
+        for(BrickWall brickWall : foundation.brickWalls.values())
+        {
+            env.getRootNode().attachChild(brickWall.node);
+            brickWall.init(env);
 
         }
     }

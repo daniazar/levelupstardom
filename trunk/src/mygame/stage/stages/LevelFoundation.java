@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import mygame.model.BrickWall;
 import mygame.model.Goal;
 import mygame.model.Interruptor;
 
@@ -35,6 +36,7 @@ public class LevelFoundation {
     public HashMap<Integer, Hazard> hazards;
     public float time;
     public HashMap<Integer, Interruptor> interruptors = new HashMap<Integer, Interruptor>();
+    public HashMap<Integer, BrickWall> brickWalls = new HashMap<Integer, BrickWall>();
 
     public LevelFoundation(){
     }
@@ -48,7 +50,7 @@ public class LevelFoundation {
             float capsuleradius, float playerspeed, Vector3f spawnpoint, Goal goal,
             HashMap<Integer, PickableSpheres> spheres,
             HashMap<Integer, Hazard> hazards, float time,
-            HashMap<Integer, Interruptor> interruptors)
+            HashMap<Integer, Interruptor> interruptors, HashMap<Integer, BrickWall> brickWalls)
     {
         this.scenefile = scenefile;
         this.scenetype = scenetype;
@@ -61,6 +63,7 @@ public class LevelFoundation {
         this.spheres = new HashMap<Integer, PickableSpheres>(spheres);
         this.hazards = new HashMap<Integer, Hazard>(hazards);
         this.interruptors = interruptors;
+        this.brickWalls = brickWalls;
     }
     
     public static LevelFoundation loadFromFile(String filename)
@@ -100,6 +103,8 @@ public class LevelFoundation {
         this.hazards = new HashMap<Integer, Hazard>(levelsF.hazards);
         this.spheres = new HashMap<Integer, PickableSpheres>(levelsF.spheres);
         this.interruptors = new HashMap<Integer, Interruptor>(levelsF.interruptors);
+        this.brickWalls = new HashMap<Integer, BrickWall>(levelsF.brickWalls);
+
         this.time = time;
     }
 
