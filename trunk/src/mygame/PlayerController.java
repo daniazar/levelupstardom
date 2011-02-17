@@ -29,8 +29,10 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.nio.channels.Channel;
 import mygame.level.SceneLoader;
 import mygame.stage.GameStageEnvironment;
@@ -43,7 +45,7 @@ import mygame.stage.stages.LevelFoundation;
 public class PlayerController implements AnimEventListener, ActionListener, PhysicsCollisionListener{
 
     public Node  player, COGplaceholder, baseplaceholder;
-
+    public Node placeholder;
     private GameStageEnvironment env;
     private SceneLoader scLoader;
     private BitmapText sysout;
@@ -99,12 +101,20 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         Material mat_default = new Material(env.getAssetManager(), "Common/MatDefs/Misc/ShowNormals.j3md");
         player = (Node) env.getAssetManager().loadModel(scLoader.foundation.playermesh);
 
-//        player.getWorldBound().
+        placeholder = new Node();
+        
+        placeholder.attachChild(player);
 
+
+   //     placeholder.attachChild(player);
+//        player.getWorldBound().
+        playerPhysics.attachChild(placeholder);
+
+        placeholder.setLocalTransform(new Transform(new Vector3f(0,0,0)));
+        
         player.setMaterial(mat_default);
 
-        playerPhysics.attachChild(player);
-
+   
 
         COGplaceholder = new Node("COG placeholder");
      //   COGplaceholder.attachChild(boxDebug);
@@ -117,6 +127,8 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         player.attachChild(baseplaceholder);
         reorient();
 
+        placeholder.rotate(0.0f, (float)Math.toRadians(0.0f), 0.0f);
+      //  playerPhysics.attachChild(placeholder);
 
         control = player.getControl(AnimControl.class);
         control.addListener(this);
@@ -185,6 +197,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
     private void reorient() {
              player.rotate(modelStandUpRotation);
+
              centerOnPlaceholder(baseplaceholder);
     }
 
@@ -245,14 +258,16 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
 
 
+
         if (walkDirection.length() == 0) {
             if (!"Start".equals(channel.getAnimationName()) && !play) {
                 channel.setAnim("Start", 0.0f);
 
             }
         } else {
-            modelRotation.lookAt(walkDirection, Vector3f.UNIT_Z);
-
+            modelRotation.lookAt(walkDirection, Vector3f.UNIT_Y);
+float aaa[] = modelRotation.toAngles(null);
+            System.out.println(aaa[0]+","+aaa[1]+","+aaa[2]);
             if (airTime > .3f) {
                 if (!"Start".equals(channel.getAnimationName()) && !play) {
                     channel.setAnim("Start", 0.0f);
@@ -263,9 +278,11 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         }
 
 
-        Quaternion q = player.getWorldRotation();
+        
 
-     //  player.rotate(modelRotation.mult(q));
+        placeholder.setLocalRotation(modelRotation);
+        //Gracias a Daniel AZAR por tremendo dato!!!!!!!
+        placeholder.rotate(new Quaternion(new float[]{0.0f,(float)Math.toRadians(90),0.0f}));
         modelRotation.multLocal(modelDirection);
         modelRight.set(modelDirection);
         ROTATE_LEFT.multLocal(modelRight);
@@ -339,7 +356,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
         Vector3f offset = new Vector3f(placeholder.getWorldTranslation());
 
-        Vector3f origin = player.getParent().getWorldTranslation();
+        Vector3f origin = playerPhysics.getWorldTranslation();
 //        System.out.println(origin);
 
         origin.y -= scLoader.foundation.capsuleradius;

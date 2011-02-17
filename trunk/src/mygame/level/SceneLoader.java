@@ -234,6 +234,12 @@ public class SceneLoader {
         }
 
     }
+    private void updateHazardCollisions(float tpf)
+    {
+        env.getRootNode().updateGeometricState();
+        CollisionResults results;
+    }
+
 
 
 }

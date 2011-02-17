@@ -31,6 +31,7 @@ public class LevelFoundation {
     public HashMap<Integer, PickableSpheres> spheres;
     public ArrayList<Integer> spheresToRemove = new ArrayList<Integer>();
     public HashMap<Integer, Hazard> hazards;
+    public float time;
    
 
     public LevelFoundation(){
@@ -44,12 +45,12 @@ public class LevelFoundation {
     public LevelFoundation(String scenefile, String scenetype, String playermesh,
             float capsuleradius, float playerspeed, Vector3f spawnpoint, Vector3f goal,
             Vector3f goalextent, HashMap<Integer, PickableSpheres> spheres,
-            HashMap<Integer, Hazard> hazards)
+            HashMap<Integer, Hazard> hazards, float time)
     {
         this.scenefile = scenefile;
         this.scenetype = scenetype;
         this.playermesh = playermesh;
-
+        this.time = time;
         this.capsuleradius = capsuleradius;
         this.playerspeed = playerspeed;
         this.spawnpoint = new Vector3f(spawnpoint);
@@ -96,7 +97,7 @@ public class LevelFoundation {
         this.pointLightPositions = levelsF.pointLightPositions;
         this.hazards = new HashMap<Integer, Hazard>(levelsF.hazards);
         this.spheres = new HashMap<Integer, PickableSpheres>(levelsF.spheres);
-
+        this.time = time;
     }
 
      public void markSphereforRemoval(Integer index)
