@@ -43,7 +43,7 @@ public class LevelController extends Node{
         attachChild(objects);
     //    attachChild(timer);
         attachChild(text);
-        initCrossHairs();
+       // initCrossHairs();
     }
 
     public void objectCollected(){

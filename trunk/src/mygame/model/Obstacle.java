@@ -29,7 +29,7 @@ public class Obstacle {
     public Vector3f extent;
     public Geometry geom;
        public PhysicsNode physicsNode;
-
+       public GameStageEnvironment env;
     public Obstacle() {
     }
 
@@ -39,6 +39,7 @@ public class Obstacle {
     }
 
     public void init(GameStageEnvironment env) {
+        this.env = env;
         Mesh mesh = new Box(pos, extent.x, extent.y, extent.z);
         geom = new Geometry("Box", mesh);
                 AssetManager assman = env.getAssetManager();
@@ -49,14 +50,15 @@ public class Obstacle {
 
         //geom.addControl(new RigidBody).setMaterial(mat);
 
-
-        BoxCollisionShape shape = new BoxCollisionShape(extent);
-        physicsNode = new PhysicsNode(geom,shape,10);
-       // physicsNode.attachDebugShape(assman);
+        Vector3f extenthalf = new Vector3f(extent.x / 2, extent.y / 2, extent.z / 2);
+        BoxCollisionShape shape = new BoxCollisionShape(extenthalf);
+        physicsNode = new PhysicsNode(geom,shape,0);
+        //physicsNode.setCollideWithGroups(physicsNode.COLLISION_GROUP_01);
+       physicsNode.attachDebugShape(assman);
 
         physicsNode.setLocalTranslation(pos.x, pos.y, pos.z);
         env.getRootNode().attachChild(physicsNode);
-        env.getRootNode().attachChild(geom);
+      //  env.getRootNode().attachChild(geom);
 
         env.getPhysicsSpace().add(physicsNode);
         
@@ -64,6 +66,10 @@ public class Obstacle {
 
 //
 
+    }
 
+    public void removeMyself()
+    {
+        env.getRootNode().detachChild(physicsNode);
     }
 }

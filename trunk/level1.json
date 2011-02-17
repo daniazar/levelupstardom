@@ -3,7 +3,7 @@
     "scenetype": "zip",
     "playermesh": "Models/Chest.j3o",
     "capsuleradius": 3.0,
-    "playerspeed": 0.1,
+    "playerspeed": 0.2,
     "time": 200.0,
     "spawnpoint": {
         "x": 60.0,

@@ -23,13 +23,16 @@ import mygame.stage.scene.SceneObject;
 import mygame.stage.scene.SceneObjectImpl;
 public class MainMenu extends GameStage {
     private final UIFrame FRAME;
+    private final UIButton newGameButton = new UIButton("New Game");
+
+	private final UIButton settingsButton = new UIButton("Settings");
+        private  final UIButton highscoreButton = new UIButton("Highscores");
+	private final UIButton exitButton = new UIButton("Exit");
+        private final UIPanel panel = new UIPanel();
 
     public MainMenu(GameStageEnvironment env) {
 	super(env, MainMenu.class.getName());
-	final UIButton newGameButton = new UIButton("New Game");
-	final UIButton settingsButton = new UIButton("Settings");
-        final UIButton highscoreButton = new UIButton("Highscores");
-	final UIButton exitButton = new UIButton("Exit");
+
 
 	UIActionListener listener = new UIActionListener() {
 
@@ -55,7 +58,6 @@ public class MainMenu extends GameStage {
         highscoreButton.addUIActionListener(listener);
 	exitButton.addUIActionListener(listener);
 
-	UIPanel panel = new UIPanel();
 	panel.setLayout(new UIGridLayout(4, 1));
 	panel.add(newGameButton);
 	panel.add(settingsButton);

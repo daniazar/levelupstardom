@@ -81,7 +81,8 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         enableDebug();
 
         playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(scLoader.foundation.capsuleradius), .1f);
-        
+        playerPhysics.attachDebugShape(env.getAssetManager());
+        playerPhysics.setCollisionGroup(playerPhysics.COLLISION_GROUP_01);
         playerPhysics.setJumpSpeed(70);
         playerPhysics.setFallSpeed(90);
         playerPhysics.setGravity(100);
@@ -193,11 +194,18 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
              centerOnPlaceholder(baseplaceholder);
     }
 
+    public void stop()
+    {
+        
+        env.getRootNode().detachChild(playerPhysics);
+        env.getRootNode().detachChild(player);
+
+    }
     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
         play = false;
      //   if("Jump".equals(channel.getAnimationName()))
      //       SoundManager.playFallSound();
-        channel.setAnim("Start");
+        channel.setAnim("Start", 1.0f);
     }
 
     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {

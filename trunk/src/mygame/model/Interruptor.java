@@ -52,7 +52,7 @@ public class Interruptor {
             return;
         }
         activated = true;
-        obstacle.geom.removeFromParent();
+        obstacle.removeMyself();
         geom.setMaterial(mat_activated);
     }
 
