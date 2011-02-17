@@ -17,6 +17,7 @@ import java.util.Map;
 import jme3ui.core.UISystem;
 import jme3ui.theme.UIThemeManager;
 import jme3ui.theme.orange.OrangeUITheme;
+import mygame.media.SoundManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.TimeHighscores;
@@ -58,6 +59,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         settings.setSettingsDialogImage("/Textures/Logo.png");
         main.setSettings(settings);
         main.start();
+
     }
 
 
@@ -107,6 +109,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
         highScoreMenu.addChild(new TimeHighscores(this));
         highScoreMenu.addChild(new ObjectHighscores(this));
 
+        SoundManager.initSoundManager(this.getAssetManager(), this.getAudioRenderer());
 
         MainMenu mainMenu = new MainMenu(this);
 	mainMenu.addChild(new Settings(this));
