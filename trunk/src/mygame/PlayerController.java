@@ -7,18 +7,11 @@ package mygame;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
-import com.jme3.animation.LoopMode;
 import com.jme3.app.SimpleApplication;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.nodes.PhysicsCharacterNode;
-import com.jme3.collision.Collidable;
-import com.jme3.collision.CollisionResults;
-import com.jme3.collision.UnsupportedCollisionException;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.ChaseCamera;
@@ -32,8 +25,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import java.nio.channels.Channel;
 import mygame.level.SceneLoader;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.LevelFoundation;
@@ -267,7 +258,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         } else {
             modelRotation.lookAt(walkDirection, Vector3f.UNIT_Y);
 float aaa[] = modelRotation.toAngles(null);
-            System.out.println(aaa[0]+","+aaa[1]+","+aaa[2]);
+            
             if (airTime > .3f) {
                 if (!"Start".equals(channel.getAnimationName()) && !play) {
                     channel.setAnim("Start", 0.0f);

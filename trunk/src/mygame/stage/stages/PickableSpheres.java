@@ -60,4 +60,8 @@ public class PickableSpheres {
         geom.setMaterial(mat_activated);
     }
 
+    public boolean  isActivated() {
+        return activated;
+    }
+
 }

@@ -23,6 +23,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.plugins.ogre.OgreMeshKey;
 import java.util.ArrayList;
 import mygame.PlayerController;
+import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.Hazard;
 import mygame.stage.stages.LevelFoundation;
@@ -117,7 +118,7 @@ public class SceneLoader {
 
         for (Vector3f plPosition : foundation.pointLightPositions) {
             PointLight pl = new PointLight();
-            pl.setColor(ColorRGBA.White.clone().multLocal(2));
+            pl.setColor(ColorRGBA.Blue.clone().multLocal(2));
             pl.setPosition(plPosition);
             pl.setRadius(10);
             env.getRootNode().addLight(pl);
@@ -193,6 +194,7 @@ public class SceneLoader {
     public void update(float tpf) {
         player.update(tpf);
         updatePickUpCollisions(tpf);
+        updateHazardCollisions(tpf);
     }
 
 
@@ -222,13 +224,18 @@ public class SceneLoader {
 
         for(PickableSpheres sphere : foundation.spheres.values())
         {
+            if (sphere.isActivated()) {
+              continue;
+            }
+
             results = new CollisionResults();
             BoundingVolume bv = sphere.geom.getWorldBound();
             player.player.collideWith(bv, results);
 
             if (results.size() > 0) {
                 sphere.activate();
-
+                PickupGameInstanceManager.getInstance().addPoints(100);
+                System.out.println(PickupGameInstanceManager.getInstance().getScore() + " Score");
             }
 
         }
@@ -238,6 +245,18 @@ public class SceneLoader {
     {
         env.getRootNode().updateGeometricState();
         CollisionResults results;
+
+        for (Hazard hazard : foundation.hazards.values()) {
+
+            results = new CollisionResults();
+            BoundingVolume bv = hazard.geom.getWorldBound();
+            player.player.collideWith(bv, results);
+
+            if (results.size() > 0) {
+                PickupGameInstanceManager.getInstance().damageCharacter(tpf * hazard.dot);
+                System.out.println(PickupGameInstanceManager.getInstance().getEnergyLeft() + " HP");
+            }
+        }
     }
 
 

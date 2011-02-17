@@ -37,7 +37,7 @@ public class LevelStage extends GameStage {
         super(env, "LevelStage");
         this.env = env;
         levels = new LevelsConfig("levels.json");
-        gameInstanceManager = new PickupGameInstanceManager();
+        gameInstanceManager = PickupGameInstanceManager.getNewInstance();
 
     }
 
