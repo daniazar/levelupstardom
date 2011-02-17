@@ -7,10 +7,5 @@
         "2": {
             "name": "Intermediate",
             "filename": "level2.json" 
-        },
-        "3": {
-            "name": "Advanced",
-            "filename": "level2.json" 
-        } 
-    }
+        }  }
 }

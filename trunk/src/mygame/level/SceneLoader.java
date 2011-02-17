@@ -235,6 +235,7 @@ public class SceneLoader {
 
     public void stop() {
         player.stop();
+        env.getPhysicsSpace().removeAll(levelPhyNode);
         env.getRootNode().detachChild(levelPhyNode);
         env.getRootNode().detachChild(levelNode);
     }
