@@ -26,6 +26,7 @@ import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import mygame.level.SceneLoader;
+import mygame.media.SoundManager;
 import mygame.stage.GameStageEnvironment;
 import mygame.stage.stages.LevelFoundation;
 
@@ -80,7 +81,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
         enableDebug();
 
         playerPhysics = new PhysicsCharacterNode(new SphereCollisionShape(scLoader.foundation.capsuleradius), .1f);
-        playerPhysics.attachDebugShape(env.getAssetManager());
+        
         playerPhysics.setJumpSpeed(70);
         playerPhysics.setFallSpeed(90);
         playerPhysics.setGravity(100);
@@ -113,7 +114,7 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
         baseplaceholder = new Node("base plholder");
        // baseplaceholder.attachChild(baseDebug);
-        baseplaceholder.setLocalTranslation(new Vector3f(-2.56f, 9.0f, -2f));
+        baseplaceholder.setLocalTranslation(new Vector3f(-2.56f, 9.0f, -1.0f));
         player.attachChild(COGplaceholder);
         player.attachChild(baseplaceholder);
         reorient();
@@ -194,6 +195,8 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
         play = false;
+     //   if("Jump".equals(channel.getAnimationName()))
+     //       SoundManager.playFallSound();
         channel.setAnim("Start");
     }
 
@@ -251,14 +254,14 @@ public class PlayerController implements AnimEventListener, ActionListener, Phys
 
 
         if (walkDirection.length() == 0) {
+            SoundManager.stopStepsSound();
             if (!"Start".equals(channel.getAnimationName()) && !play) {
                 channel.setAnim("Start", 0.0f);
 
             }
         } else {
+            SoundManager.playStepsSound();
             modelRotation.lookAt(walkDirection, Vector3f.UNIT_Y);
-float aaa[] = modelRotation.toAngles(null);
-            
             if (airTime > .3f) {
                 if (!"Start".equals(channel.getAnimationName()) && !play) {
                     channel.setAnim("Start", 0.0f);

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package mygame.stage.stages;
+package mygame.model;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
@@ -19,24 +19,21 @@ import mygame.stage.GameStageEnvironment;
  *
  * @author dgrandes
  */
-public class Hazard {
+public class Goal {
 
     public Vector3f pos;
     public Vector3f extent;
-    //Damage over Time
-    public float dot;
     public Geometry geom;
 
-    public Hazard()
+    public Goal()
     {
 
     }
 
-    public Hazard(Vector3f pos, Vector3f extent, float dot)
+    public Goal(Vector3f pos, Vector3f extent, float dot)
     {
         this.pos = pos;
         this.extent = extent;
-        this.dot = dot;
     }
 
     public void init(GameStageEnvironment env)
@@ -46,7 +43,7 @@ public class Hazard {
         AssetManager assman = env.getAssetManager();
         Material mat  = new Material(assman,  "Common/MatDefs/Misc/SolidColor.j3md");
 
-        mat.setColor("m_Color", ColorRGBA.Green);
+        mat.setColor("m_Color", ColorRGBA.Orange);
 
 
         geom.setMaterial(mat);

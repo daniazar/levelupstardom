@@ -17,6 +17,7 @@ import mygame.model.GameInstanceManager;
 import mygame.model.PickupGameInstanceManager;
 import mygame.stage.GameStage;
 import mygame.stage.GameStageEnvironment;
+import mygame.stage.gui.LevelController;
 import mygame.stage.gui.Timer;
 
 /**
@@ -32,13 +33,16 @@ public class LevelStage extends GameStage {
     private GameInstanceManager gameInstanceManager;
   //  private Timer timer;
     private BitmapText sysout;//dubug to player screen
+    public LevelController levelController;
 
     public LevelStage(GameStageEnvironment env) {
         super(env, "LevelStage");
         this.env = env;
         levels = new LevelsConfig("levels.json");
         gameInstanceManager = PickupGameInstanceManager.getNewInstance();
+        enableHud();
 
+      
     }
 
     //Call this to load a level before jump to
@@ -53,7 +57,9 @@ public class LevelStage extends GameStage {
 
       env.getRootNode().attachChild(this.level);
       sceneLoader.init(foundation,this.level, env);
- 
+         levelController = new LevelController(env, foundation.spheres.size());
+         env.getGuiNode().attachChild(levelController);
+
   }
     @Override
     public void start() {
@@ -89,14 +95,25 @@ public class LevelStage extends GameStage {
         env.getRootNode().updateLogicalState(tpf);
         env.getRootNode().updateGeometricState();
 
-
+        levelController.updateText("Health:"+gameInstanceManager.getEnergyLeft()+" Score:"+gameInstanceManager.getScore());
         sceneLoader.update(tpf);
+
+        if (gameInstanceManager.isGameOver()) {
+            gameOver();
+        }
     }
 
+    public void gameOver() {
+        SoundManager.playGameOverSound();
+    }
 
+    public void victory() {
+        SoundManager.playVictorySound();
+        System.out.println("Victory");
+    }
     private void updateHud(int life, float time, int collected, int all)
     {
-        
+        sysout.setText("ohla Danila");
     }
         private void enableHud() {
 //For debugging
@@ -105,7 +122,7 @@ public class LevelStage extends GameStage {
         guiFont = env.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         sysout = new BitmapText(guiFont, false);
         sysout.setSize(guiFont.getCharSet().getRenderedSize());
-        sysout.setLocalTranslation(100, 0, 0);
+        sysout.setLocalTranslation( 40, env.getScreenSize().height - 40, 0);
         env.getGuiNode().attachChild(sysout);
     }
 

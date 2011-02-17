@@ -5,6 +5,8 @@
 
 package mygame.model;
 
+import com.jme3.asset.AssetManager;
+
 /**
  *
  * @author matiaspan

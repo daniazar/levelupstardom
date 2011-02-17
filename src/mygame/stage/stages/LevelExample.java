@@ -78,7 +78,7 @@ public class LevelExample extends GameStage {
         createLight();
         createSky();
 
-        levelController = new LevelController(env, new SceneObjectImpl(new Geometry()), new SceneObjectImpl(new Geometry()), 10);
+        levelController = new LevelController(env   , 10);
         env.getGuiNode().attachChild(levelController);
 
         initializeCamera();

@@ -5,6 +5,7 @@
 
 package mygame.stage.stages;
 
+import mygame.model.Hazard;
 import com.google.gson.Gson;
 import com.jme3.math.Vector3f;
 import java.io.BufferedReader;
@@ -12,6 +13,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import mygame.model.Goal;
+import mygame.model.Interruptor;
 
 /**
  *
@@ -25,14 +28,13 @@ public class LevelFoundation {
     public float capsuleradius;
     public float playerspeed;
     public Vector3f spawnpoint;
-    public Vector3f goal;
-    public Vector3f goalextent;
+    public Goal goal;
     public List<Vector3f> pointLightPositions;
     public HashMap<Integer, PickableSpheres> spheres;
     public ArrayList<Integer> spheresToRemove = new ArrayList<Integer>();
     public HashMap<Integer, Hazard> hazards;
     public float time;
-   
+    public HashMap<Integer, Interruptor> interruptors = new HashMap<Integer, Interruptor>();
 
     public LevelFoundation(){
     }
@@ -43,9 +45,10 @@ public class LevelFoundation {
     }
 
     public LevelFoundation(String scenefile, String scenetype, String playermesh,
-            float capsuleradius, float playerspeed, Vector3f spawnpoint, Vector3f goal,
-            Vector3f goalextent, HashMap<Integer, PickableSpheres> spheres,
-            HashMap<Integer, Hazard> hazards, float time)
+            float capsuleradius, float playerspeed, Vector3f spawnpoint, Goal goal,
+            HashMap<Integer, PickableSpheres> spheres,
+            HashMap<Integer, Hazard> hazards, float time,
+            HashMap<Integer, Interruptor> interruptors)
     {
         this.scenefile = scenefile;
         this.scenetype = scenetype;
@@ -54,12 +57,12 @@ public class LevelFoundation {
         this.capsuleradius = capsuleradius;
         this.playerspeed = playerspeed;
         this.spawnpoint = new Vector3f(spawnpoint);
-        this.goal = new Vector3f(goal);
-        this.goalextent = new Vector3f(goalextent);
+        this.goal = goal;
         this.spheres = new HashMap<Integer, PickableSpheres>(spheres);
         this.hazards = new HashMap<Integer, Hazard>(hazards);
+        this.interruptors = interruptors;
     }
-
+    
     public static LevelFoundation loadFromFile(String filename)
     {
          StringBuilder levelsJSON = new StringBuilder();
@@ -88,7 +91,6 @@ public class LevelFoundation {
         LevelFoundation levelsF = loadFromFile(filename);
         this.capsuleradius = levelsF.capsuleradius;
         this.goal = levelsF.goal;
-        this.goalextent = levelsF.goalextent;
         this.playermesh = levelsF.playermesh;
         this.playerspeed = levelsF.playerspeed;
         this.scenefile = levelsF.scenefile;
@@ -97,6 +99,7 @@ public class LevelFoundation {
         this.pointLightPositions = levelsF.pointLightPositions;
         this.hazards = new HashMap<Integer, Hazard>(levelsF.hazards);
         this.spheres = new HashMap<Integer, PickableSpheres>(levelsF.spheres);
+        this.interruptors = new HashMap<Integer, Interruptor>(levelsF.interruptors);
         this.time = time;
     }
 

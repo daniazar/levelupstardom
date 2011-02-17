@@ -21,13 +21,13 @@ import mygame.stage.scene.SceneObject;
 public class LevelController extends Node{
 
     private SceneObject player, levelEnd;
-    public Timer timer;
-    private BitmapText objects, distance;
+   // public Timer timer;
+    private BitmapText objects, text;
     private int objectCounter = 0 ,totalObjects;
     private GameStageEnvironment env;
 
 
-    public LevelController(GameStageEnvironment env, SceneObject player, SceneObject levelEnd, int totalObjects){
+    public LevelController(GameStageEnvironment env, int totalObjects){
 
         this.levelEnd = levelEnd;
         this.player = player;
@@ -35,14 +35,14 @@ public class LevelController extends Node{
         this.env = env;
 
         objects  = new BitmapText(env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
-        distance = new BitmapText(env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
+        text = new BitmapText(env.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
         updateObjectsText();
         objects.setLocalTranslation( 40, env.getScreenSize().height - 40, 0);
-        distance.setLocalTranslation( 40, env.getScreenSize().height , 0);
-       // timer = new Timer(env, this);
+        text.setLocalTranslation( 40, env.getScreenSize().height , 0);
+      //  timer = new Timer(env, 200);
         attachChild(objects);
-        attachChild(timer);
-        attachChild(distance);
+    //    attachChild(timer);
+        attachChild(text);
         initCrossHairs();
     }
 
@@ -56,9 +56,15 @@ public class LevelController extends Node{
     }
 
 
-    public void updateDistanceText(){
-        distance.setText("Distance to lvl end " + player.getWrappedSpatial().getLocalTranslation().distance(levelEnd.getWrappedSpatial().getLocalTranslation()) + "meters.");
+    public void updateText(String string){
+        text.setText(string);
     }
+    
+    public void clearText(){
+        text.setText("");
+    }
+
+
 
  /** A plus sign used as crosshairs to help the player with aiming.*/
   protected void initCrossHairs() {
