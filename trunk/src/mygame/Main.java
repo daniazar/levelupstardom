@@ -67,65 +67,7 @@ public class Main extends /*SimpleBulletApplication */ SimpleApplication impleme
 
     @Override
     public void simpleInitApp() {
-//        UIThemeManager.setDefaultTheme(new OrangeUITheme());
-//        bulletAppState = new BulletAppState();
-//        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-//
-//        stateManager.attach(bulletAppState);
-//        bulletAppState.getPhysicsSpace().setAccuracy(0.005f);
-//
-//        //mcam = new MouseCamera(cam, inputManager);
-//
-//
-//        //flyCam.setUpVector(Vector3f.UNIT_Y);
-////        flyCam.setDragToRotate(true);
-////        flyCam.setMoveSpeed(20);
-////        flyCam.setEnabled(true);
-//	statsView.removeFromParent();
-//
-//        UISystem.initialize(this);
-//
-//	try {
-////	    properties.put(PropertyKey.TRACK_INFO_SEQUENCE,
-////		    new TrackInfoSequence(getClass().
-////		    getResource("/rollmadness/formats/tracklist.xml")));
-//	} catch(Exception ex) {
-////	    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "", ex);
-//	    return;
-//	}
-//
-//	//ColladaLoader.addTextureBase("rollmadness/textures/");
-//	//assetManager.registerLocator(getClass().getResource("/rollmadness/textures").toString(), UrlLocator.class.getName());
-//	//assetManager.registerLoader(ColladaLoader.class.getName(), "dae");
-//
-//        //rootNode.addControl(triggerSystem);
-//        LevelSelect lselect = new LevelSelect(this);
-//        levelStage = new LevelStage(this, lselect);
-//	//GameOver gameOver = new GameOver(this);
-//        //WinStage trackWin = new WinStage(this);
-//	//levelStage.addChild(gameOver);
-//	//levelStage.addChild(trackWin);
-//
-//        HighscoreMenu highScoreMenu = new HighscoreMenu(this);
-//        highScoreMenu.addChild(new TimeHighscores(this));
-//        highScoreMenu.addChild(new ObjectHighscores(this));
-//
-//        GameOverStage gameOverStage = new GameOverStage(this);
-//
-//        SoundManager.initSoundManager(this.getAssetManager(), this.getAudioRenderer());
-//
-//         mainMenu = new MainMenu(this);
-//	mainMenu.addChild(new Settings(this));
-//        mainMenu.addChild(lselect);
-//        mainMenu.addChild(highScoreMenu);
-////	mainMenu.addChild(new GameStart(this));
-//	mainMenu.addChild(levelStage);
-//        mainMenu.addChild(gameOverStage);
-////	mainMenu.addChild(new PlayerHud(this));
-//        mainMenu.addChild(new LevelExample(this));
-//	mainMenu.jumpTo(MainMenu.class.getName());
 
-  //      gameOverStage.mainMenu = mainMenu;
         reset();
     }
 

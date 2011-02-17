@@ -88,7 +88,11 @@ public class LevelSelect extends GameStage {
     {
         index++;
         if(index >= levels.size())
+        {
             System.out.println("Game FINISHED");
+            env.getLevelStage().stop();
+             jumpTo(GameOverStage.class.getName());
+        }
         else
         {
             env.getLevelStage().stop();
