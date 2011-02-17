@@ -63,11 +63,7 @@ public class SceneLoader {
             loadObjScene();
         }
 
-        addPickupObjects();
-        addHazardAreas();
-        addInterruptors();
-        addGoal();
-        addBricks();
+
         //   spawn.lookAt(goal.getWorldTranslation(), Vector3f.UNIT_X);
         //     env.getCamera().setFrame(spawn.getWorldTranslation(), spawn.getWorldRotation());
 
@@ -96,13 +92,13 @@ public class SceneLoader {
 //        mat2.setColor("m_Color", ColorRGBA.Magenta);
 //
         // Add a physics sphere to the world
-        PhysicsNode physicsSphere = new PhysicsNode(new SphereCollisionShape(1), 1);
-
-        physicsSphere.setLocalTranslation(new Vector3f(60, -14, 60));
-        physicsSphere.attachDebugShape(env.getAssetManager());
-        physicsSphere.addCollideWithGroup(PhysicsNode.COLLISION_GROUP_02);
-        level.attachChild(physicsSphere);
-        env.getPhysicsSpace().add(physicsSphere);
+//        PhysicsNode physicsSphere = new PhysicsNode(new SphereCollisionShape(1), 1);
+//
+//        physicsSphere.setLocalTranslation(new Vector3f(60, -14, 60));
+//        physicsSphere.attachDebugShape(env.getAssetManager());
+//        physicsSphere.addCollideWithGroup(PhysicsNode.COLLISION_GROUP_02);
+//        level.attachChild(physicsSphere);
+//        env.getPhysicsSpace().add(physicsSphere);
 //
 //        // Add a physics sphere to the world using the collision shape from sphere one
 ////        PhysicsNode physicsSphere2=new PhysicsNode(physicsSphere.getCollisionShape(),1);
@@ -131,6 +127,12 @@ public class SceneLoader {
             pl.setRadius(40);
             levelNode.addLight(pl);
         }
+
+                addPickupObjects();
+        addHazardAreas();
+        addInterruptors();
+        addGoal();
+        addBricks();
     }
 
     private void loadZipScene() {
@@ -155,12 +157,6 @@ public class SceneLoader {
             //  env.getAssetManager().registerLocator("http://jmonkeyengine.googlecode.com/files/town.zip", HttpZipLocator.class.getName());
 
             env.getAssetManager().registerLocator("town.zip", ZipLocator.class.getName());
-
-            Spatial sceneModel;
-      
-//
-//            sceneModel = env.getAssetManager().loadModel("town/main.scene");
-//            sceneModel.setLocalScale(2f);
 
                         // create the geometry and attach it
             MaterialList matList = (MaterialList) env.getAssetManager().loadAsset("town/main.material");
@@ -256,10 +252,17 @@ public class SceneLoader {
         for (Interruptor interruptor : foundation.interruptors.values()) {
             interruptor.init(env);
             interruptor.obstacle.init(env);
-
-            levelPhyNode.attachChild(interruptor.geom);
+               levelPhyNode.attachChild(interruptor.geom);
+            levelPhyNode.attachChild(interruptor.obstacle.root);
+         
+//              levelPhyNode.attachChild(interruptor.obstacle.root);
+//            PhysicsNode phy = interruptor.obstacle.physicsNode;
+//            env.getPhysicsSpace().add(phy);
+           
 
         }
+
+
     }
 
 
@@ -267,7 +270,7 @@ public class SceneLoader {
     {
         for(BrickWall brickWall : foundation.brickWalls.values())
         {
-            env.getRootNode().attachChild(brickWall.node);
+            levelPhyNode.attachChild(brickWall.node);
             brickWall.init(env);
 
         }
@@ -334,7 +337,9 @@ public class SceneLoader {
     }
 
     private void updateInterruptorCollisions(float tpf) {
-        env.getRootNode().updateGeometricState();
+       // env.getRootNode().updateGeometricState();
+
+        
         CollisionResults results;
 
         for (Interruptor interruptor : foundation.interruptors.values()) {
@@ -344,9 +349,8 @@ public class SceneLoader {
             player.player.collideWith(bv, results);
 
             if (results.size() > 0) {
-
-
                 interruptor.activate();
+               levelPhyNode.detachChild(interruptor.obstacle.root);
             }
         }
     }
