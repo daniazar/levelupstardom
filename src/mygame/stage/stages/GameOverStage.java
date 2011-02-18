@@ -28,7 +28,10 @@ public class GameOverStage extends GameStage {
         button.addUIActionListener(new UIActionListener() {
 
             public void onUIAction(UIAction action) {
+                stop();
                 GameOverStage.this.env.reset();
+
+
 
             }
         });

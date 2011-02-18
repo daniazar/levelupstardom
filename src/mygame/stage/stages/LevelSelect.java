@@ -65,6 +65,7 @@ public class LevelSelect extends GameStage {
         this.env = env;
 	UIFrame frame = new UIFrame();
 	frame.setContents(panel);
+
 	FRAME = frame;
     }
 
@@ -74,6 +75,7 @@ public class LevelSelect extends GameStage {
 	FRAME.resizeAndCenter(new Dimension(240, 200),
 		getGameStageEnvironment().getScreenSize());
 	FRAME.setVisible(true);
+
     }
 
     @Override
@@ -94,16 +96,17 @@ public class LevelSelect extends GameStage {
         {
             System.out.println("Game FINISHED");
             env.getLevelStage().stop();
-            String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+            String DATE_FORMAT_NOW = "yyyy-MM-dd";
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 
-            HighScores.getInstance().addHighScore(sdf.format(cal.getTime()), ((LevelStage) env.getLevelStage()).gameInstanceManager.getScore(), HighScores.ScoreType.SCORE_TIME);
+            HighScores.getInstance().addHighScore(sdf.format(cal.getTime()), ((LevelStage) env.getLevelStage()).gameInstanceManager.getScore(), HighScores.ScoreType.SCORE_OBJECT);
              jumpTo(GameOverStage.class.getName());
         }
         else
         {
             env.getLevelStage().stop();
+            
             ((LevelStage) env.getLevelStage()).loadLevel("level2.json", 1);
             jumpTo("LevelStage");
 

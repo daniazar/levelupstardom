@@ -71,6 +71,7 @@ public abstract class GameStage {
     }
 
     public void jumpTo(String stageName) {
+        System.out.println("Jumping to "+stageName);
 	if (name.equals(stageName)) {
 	    start();
 	} else {
