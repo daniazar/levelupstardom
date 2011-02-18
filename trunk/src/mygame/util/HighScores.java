@@ -72,16 +72,16 @@ public class HighScores {
                     highScores.addHighScore("Dev Team", 2000.1f, ScoreType.SCORE_TIME);
                     highScores.addHighScore("Dev Team", 1000.1f, ScoreType.SCORE_TIME);
 
-                    highScores.addHighScore("Dev Team", 10000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 9000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 8000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 7000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 6000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 5000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 4000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 3000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 2000, ScoreType.SCORE_OBJECT);
-                    highScores.addHighScore("Dev Team", 1000, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 10, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 9, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 8, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 7, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 6, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 5, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 4, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 3, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 2, ScoreType.SCORE_OBJECT);
+                    highScores.addHighScore("Dev Team", 1, ScoreType.SCORE_OBJECT);
                     
                   output.write( new Gson().toJson(highScores) );
                 } finally {
